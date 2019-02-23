@@ -1,0 +1,5 @@
+tesis/settings.py
+db.sqlite3
+sqlite.db
+letsencrypt/
+logs/

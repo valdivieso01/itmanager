@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <ol class="breadcrumb breadcrumb-right-arrow ">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'group_detail' object.set|slugify %}">Sets</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'set_detail' object.group|slugify object.set|slugify %}">{{object.guide}}</a></li>
+      <li class="breadcrumb-item active">Delete guide</li>
+    </ol>
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto">
+        <div>
+            <form action="" method="post">{% csrf_token %}
+                <p>Are you sure you want to delete "{{ object }}"?</p>
+                <input type="submit" class="btn btn-primary btn-block"value="Yes" />
+                <a class="btn btn-primary btn-block" href="{% url 'set_detail' object.group|slugify object.set|slugify %}">Back</a>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

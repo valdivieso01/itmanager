@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveyworkstation_list.first.survey.set.group.name|slugify %}">Sets</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveyworkstation_list.first.survey.set.group.name|slugify surveyworkstation_list.first.survey.set.name|slugify %}">{{surveyworkstation_list.first.survey.set.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveyworkstation_list.first.survey.set.group.name|slugify surveyworkstation_list.first.survey.set.name|slugify surveyworkstation_list.first.survey.name|slugify %}">{{surveyworkstation_list.first.survey.name}}</a></li>
+            <li class="breadcrumb-item active">Survey WorkStations</li>
+        </ol>
+        {% for workstation in surveyworkstation_list %}
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">{{workstation.number}}</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            User: {{workstation.user}}
+                        </p>
+                        <p class="card-text">
+                            Charge: {{workstation.charge}}
+                        </p>
+                        <p class="card-text">
+                            Telephone: {{workstation.telephone}}
+                        </p>
+                        <p class="card-text">
+                            Email: {{workstation.email}}
+                        </p>
+                        <p class="card-text">
+                            User location: {{workstation.user_location}}
+                        </p>
+                        <p class="card-text">
+                            Files location: {{workstation.files_location}}
+                        </p>
+                        <p class="card-text">
+                            Windows username: {{workstation.windows_username}}
+                        </p>
+                        <p class="card-text">
+                            Windows password: {{workstation.windows_password}}
+                        </p>
+                        <p class="card-text">
+                            Windows version: {{workstation.windows_version}}
+                        </p>
+                        <p class="card-text">
+                            Software additional: {{workstation.software_additional}}
+                        </p>
+                        <p class="card-text">
+                            Software additional: {{workstation.email_type}}
+                        </p>
+                        <p class="card-text">
+                            Server connections: {{workstation.server_connections}}
+                        </p>
+                        <p class="card-text">
+                            Observations: {{workstation.observations}}
+                        </p>
+                    </div>
+                    <a href="{% url 'surveyworkstation_update' workstation.survey.set.group.name|slugify workstation.survey.set.name|slugify workstation.survey.name|slugify workstation.number|slugify %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'surveyworkstation_delete' workstation.survey.set.group.name|slugify workstation.survey.set.name|slugify workstation.survey.name|slugify workstation.number|slugify %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

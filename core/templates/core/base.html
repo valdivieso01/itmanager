@@ -1,0 +1,184 @@
+{% load static %}
+{% load qr_code %}
+</html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="icon" href="{% static 'core/img/favicon.png' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
+        <script type="text/javascript" src="{% static 'core/js/main.js' %}"></script>
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        {% if request.user.is_authenticated %}
+            <nav class="navbar navbar-dark bg-dark">
+                <div class="ml-auto" id="menu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <!--<a class="nav-link" href="{% url 'logout' %}">Logout  <i class="fa fa-sign-out-alt"></i></a>-->
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        	{% if request.build_absolute_uri == "https://itmanager.site/" %}
+        		<div class="page-wrapper chiller-theme toggled">
+        	{% else %}
+                	<div class="page-wrapper chiller-theme">
+        	{% endif %}
+                    <a id="show-sidebar" class="btn btn-lg btn-dark" href="#">
+                        {% if request.user.profile.avatar %}
+                            <img src="{{request.user.profile.avatar.url}}" width="35" height="35" class="rounded-circle left" alt=""></a>
+                        {% else %}
+                            <img src="{% static 'registration/img/no-avatar.jpg' %}" width="35" height="35" class="rounded-circle left" alt=""></a>
+                        {% endif %}
+                    </a>
+                    <nav id="sidebar" class="sidebar-wrapper">
+                        <div class="sidebar-content">
+                            <div class="sidebar-brand">
+                                <a href="#">{{request.user}}</a>
+                                <div id="close-sidebar">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            </div>
+                            <div class="sidebar-header">
+                                <div class="user-pic">
+                                    {% if request.user.profile.avatar %}
+                                <img src="{{request.user.profile.avatar.url}}" width="35" height="35" class="rounded-circle right" alt="">
+                                    {% else %}
+                                <img src="{% static 'registration/img/no-avatar.jpg' %}" width="35" height="35" class="rounded-circle right" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="user-info">
+                                    <span class="user-name"></span>
+                                    <span class="user-role">
+                                        {% if request.user.is_superuser %}
+                                            Administrador
+                                        {% else %}
+                                            Estandar
+                                        {% endif %}
+                                    </span>
+                                    <span class="user-status">
+                                        <strong><span>{{request.user.email}}</span></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="sidebar-menu">
+                                <ul>
+                                    <li class="header-menu">
+                                        <span>General</span>
+                                    </li>
+                                <li>
+                                    <a href="{% url 'home' %}">
+                                        <i class="fa fa-home"></i>
+                                        <span>Home</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'group_list' %}">
+                                        <i class="fa fa-users"></i>
+                                        <span>Groups</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profiles:list' %}">
+                                        <i class="fa fa-address-book"></i>
+                                        <span>Profiles</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'messenger:list' %}">
+                                        <i class="fa fa-comments"></i>
+                                        <span>Messages</span>
+                                    </a>
+                                </li>
+                                <li class="header-menu">
+                                    <span>Personal</span>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profile' %}">
+                                        <i class="fa fa-address-card"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'key_list' %}">
+                                        <i class="fa fa-key"></i>
+                                        <span>Keys</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'note_list' %}">
+                                        <i class="fa fa-book"></i>
+                                        <span>Notes</span>
+                                    </a>
+                                </li>
+                                <li class="header-menu">
+                                    <span>Administration</span>
+                                </li>
+                                {% if request.user.is_superuser %}
+                                <li>
+                                    <a href="{% url 'user_list' %}">
+                                        <i class="fa fa-list-ul"></i>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            {% endif %}
+            <main class="page-content">
+                <div class="container-fluid">
+                    {% block content %} {% endblock %}
+                </div>
+            </main>
+        </div>
+    </body>
+    <script>
+        jQuery(function ($) {
+        $(".sidebar-dropdown > a").click(function() {
+          $(".sidebar-submenu").slideUp(200);
+          if (
+            $(this)
+              .parent()
+              .hasClass("active")
+          ) {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this)
+              .parent()
+              .removeClass("active");
+          } else {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this)
+              .next(".sidebar-submenu")
+              .slideDown(200);
+            $(this)
+              .parent()
+              .addClass("active");
+          }
+        });
+
+        $("#close-sidebar").click(function() {
+          $(".page-wrapper").removeClass("toggled");
+        });
+        $("#show-sidebar").click(function() {
+          $(".page-wrapper").addClass("toggled");
+        });
+        });
+    </script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</div>
+</html>

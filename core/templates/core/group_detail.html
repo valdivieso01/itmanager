@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <ol class="breadcrumb breadcrumb-right-arrow">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_detail' group.name|slugify %}">{{group.name}}</a></li>
+        <li class="breadcrumb-item active" >Sets</li>
+    </ol>
+    <div class="row justify-content-center">
+        <div class="col-md">
+            <form class="" method="GET" action="">
+                <div class="row">
+                    <div class="col input-group">
+                        <input class="form-control" type="text" placeholder="Search sets" name="q" value="{{ request.GET.q }}">
+                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button> 
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if 'edited' in request.GET %}
+        <p class="text-center" style="color:green;">Set edited succefully</p>
+    {% elif 'deleted' in request.GET %}
+        <p class="text-center" style="color:green;">Set deleted succefully</p>
+    {% elif 'created' in request.GET %}
+        <p class="text-center" style="color:green;">Set created succefully</p>
+    {% endif %}
+    {% if group.set_set.all %}
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            {% if request.GET.q != blanck %}
+                {% for set in group.set_set.all %}
+                    {% if request.GET.q in set.name %}
+                    <div class="card mb-3">
+                        <h5 class="card-header">
+                          <div class="row align-items-center">
+                              <div class="col title-cut">
+                                <strong>{{set.name}}</strong>
+                              </div>
+                              <div class="col-auto">
+                                  <a href="{% url 'set_detail' group.name|slugify set.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                  <a href="{% url 'set_update' group.name|slugify set.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                  <a href="{% url 'set_delete' group.name|slugify set.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                              </div>
+                          </div>
+                        </h5>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for set in group.set_set.all %}
+                <div class="card mb-3">
+                    <h5 class="card-header">
+                      <div class="row align-items-center">
+                          <div class="col title-cut">
+                            <strong>{{set.name}}</strong>
+                          </div>
+                          <div class="col-auto">
+                              <a href="{% url 'set_detail' group.name|slugify set.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                              <a href="{% url 'set_update' group.name|slugify set.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                              <a href="{% url 'set_delete' group.name|slugify set.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                          </div>
+                      </div>
+                    </h5>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+        <div class="col-md-12 text-center">Sets Empty, please create a new set using the button in the end of the page</div>
+    {% endif %}
+
+    <div id="container-floating">
+        <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add set">
+            <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'set_create' group.name|slugify %}"><i class="fa fa-object-group "></i></a></p>
+        </div>
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
+            <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
+        </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+

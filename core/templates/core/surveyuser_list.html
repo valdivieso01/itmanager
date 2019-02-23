@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveyuser_list.first.survey.set.group.name|slugify %}">Sets</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveyuser_list.first.survey.set.group.name|slugify surveyuser_list.first.survey.set.name|slugify %}">{{surveyuser_list.first.survey.set.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveyuser_list.first.survey.set.group.name|slugify surveyuser_list.first.survey.set.name|slugify surveyuser_list.first.survey.name|slugify %}">{{surveyuser_list.first.survey.name}}</a></li>
+            <li class="breadcrumb-item active">Survey Users</li>
+        </ol>
+        {% for user in surveyuser_list %}
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">{{user.full_name}}</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Department: {{user.department}}
+                        </p>
+                        <p class="card-text">
+                            Job Title: {{user.job_title}}
+                        </p>
+                        <p class="card-text">
+                            Phone Number: {{user.phone_number}}
+                        </p>
+                        <p class="card-text">
+                            Intern Number: {{user.intern_number}}
+                        </p>
+                        <p class="card-text">
+                            Country: {{user.country}}
+                        </p>
+                        <p class="card-text">
+                            City: {{user.city}}
+                        </p>
+                        <p class="card-text">
+                            Address: {{user.adress}}
+                        </p>
+                        <p class="card-text">
+                            Email: {{user.email}}
+                        </p>
+                        <p class="card-text">
+                            Observations: {{user.observations}}
+                        </p>
+                    </div>
+                    <a href="{% url 'surveyuser_update' user.survey.set.group.name|slugify user.survey.set.name|slugify user.survey.name|slugify user.full_name|slugify %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'surveyuser_delete' user.survey.set.group.name|slugify user.survey.set.name|slugify user.survey.name|slugify user.full_name|slugify %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

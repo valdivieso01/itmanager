@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load qr_code %}
+{% load crispy_forms_tags %}
+{% load core_tags %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' key.set.group.name|slugify %}">Sets</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' key.set.group.name|slugify key.set.name|slugify %}">{{key.set.name}}</a></li>
+            <li class="breadcrumb-item active">{{key.name}}</li>
+        </ol>
+       <div class="row mt-3">
+            <div class="col-md-12 mx-auto text-center">
+                <h2 class="section-heading mb-2">
+                    {{key.name}}
+                </h2>
+		<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
+		<a class="btn btn-primary mb-2" href="mailto:email@example.com?subject={{key.name}}&body=Username:{{key.username}}%0APassword:{{key.password}}%0ANote:{{key.note}}%0AURL:{{key.url}}"><i class="fas fa-envelope-square"></i></a>
+            </div>
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">Username</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{key.username}}
+                    </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                <h5 class="card-header">Password</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{key.password}}
+                    </p>
+                    </div>
+                </div>
+               <div class="card mb-3">
+                <h5 class="card-header">Note</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{key.note}}
+                    </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                <h5 class="card-header">URL</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{key.url}}
+                    </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <h5 class="card-header">File</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        {% if key.file.url != blanck %}
+                            <a href="{{key.file.url}}">{{key.file | getfilename}}</a>
+                        {% else %}
+                            Empty
+                        {% endif %}
+                        </p>
+                    </div>
+                </div>
+	        Last edition at {{key.history.first.history_date}}
+      	        <a href="#" data-toggle="modal" data-target=".bs-example-modal-md"><i class="material-icons">history</i></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qr-code">QR code</h5>
+                </div>
+                <div id="areaImprimir" class="modal-body mx-auto">
+                    {% key_url request.META.HTTP_HOST key.id as key_qr %}
+                    {% qr_from_text key_qr size="M" %}
+                </div>
+            	<div class="modal-footer">
+            	    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            	    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
+	    	</div>
+	    </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-md"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="history-keys">History Keys</h5>
+                </div>
+                <div class="modal-body mx-auto">
+                    {% for k in key.history.all %}
+                    <p>
+                        Date: {{k.history_date}}<br>
+                        Username: {{k.username}}<br>
+                        Password: {{k.password}}<br>
+                        File:  <a href="{{k.file.url}}">{{k.file}}</a>
+                    </p>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+  function copyToClipboard(element) {
+    $(element).select();
+    document.execCommand("copy");
+  }
+</script>
+{% endblock %}

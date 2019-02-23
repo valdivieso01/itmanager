@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href=".">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveyserver_list.first.survey.set.group.name|slugify surveyserver_list.first.survey.set.name|slugify %}">{{surveyserver_list.first.survey.set.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveyserver_list.first.survey.set.group.name|slugify surveyserver_list.first.survey.set.name|slugify surveyserver_list.first.survey.name|slugify %}">{{surveyserver_list.first.survey.name}}</a></li>
+            <li class="breadcrumb-item active">Survey Servers</li>
+        </ol>
+        {% for server in surveyserver_list %}
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">{{server.name}}</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Ip: {{server.ip}}
+                        </p>
+                        <p class="card-text">
+                            Connection: {{server.connection}}
+                        </p>
+                        <p class="card-text">
+                            Username: {{server.username}}
+                        </p>
+                        <p class="card-text">
+                            Password: {{server.password}}
+                        </p>
+                        <p class="card-text">
+                            Services: {{server.services}}
+                        </p>
+                        <p class="card-text">
+                            Observations: {{server.observations}}
+                        </p>
+                    </div>
+                    <a href="{% url 'surveyserver_update' server.survey.set.group.name|slugify server.survey.set.name|slugify server.survey.name|slugify server.name|slugify %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'surveyserver_delete' server.survey.set.group.name|slugify server.survey.set.name|slugify server.survey.name|slugify server.name|slugify %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

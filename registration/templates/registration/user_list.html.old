@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <ol class="breadcrumb breadcrumb-right-arrow ">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active ">List Users</a></li>
+    </ol>
+    <!--<div class="row">-->
+      <!--<div class="col-md-12">-->
+      {% if 'edited' in request.GET %}
+          <p style="color:green;">User edited succefully</p>
+      {% elif 'deleted' in request.GET %}
+          <p style="color:green;">User deleted succefully</p>
+      {% elif 'created' in request.GET %}
+          <p style="color:green;">User created succefully</p>
+      {% endif %}
+      {% for user in user_list %}
+      <!--<div class="card mb-3">-->
+        <!--<h5 class="card-header" >-->
+            <!--<div class="row">-->
+                <!--<div class="col-md-11">-->
+                <!--{{user}}-->
+                <!--</div>-->
+                <!--<div class="col-sd-1">-->
+                <!--<a href="{% url 'user_delete' user.username %}" class="fa fa-trash-alt" ></a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</h5>-->
+          <div class="card mb-3">
+                <h5 class="card-header">
+                  <div class="row align-items-center">
+                      <div class="col title-cut">
+                        <strong>{{user}}</strong>
+                      </div>
+                      <div class="col-auto">
+                          <a href="{% url 'profiles:detail' user.username %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                          <a href="{% url 'user_delete' user.username %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                      </div>
+                  </div>
+                </h5>
+          </div>
+      {% endfor %}
+      </div>
+    </div>
+            <div id="container-floating">
+          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add group">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'user_create' %}"><i class="fa fa-user"></i></a></p>
+          </div>
+          <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
+              <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
+          </div>
+      </div>
+
+  </div>
+</main>
+{% endblock %}
+

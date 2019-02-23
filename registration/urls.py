@@ -1,0 +1,24 @@
+from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
+from django.urls import path, include
+from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, KeyUpdate, NoteCreate, \
+    NoteDetail, NoteDelete, NoteUpdate, NoteList, KeyList, UserDelete, UserList, UserCreate, Login
+
+urlpatterns = [
+    path('', Login.as_view(), name="login"),
+    path('create/', login_required(UserCreate.as_view()), name="user_create"),
+    path('delete/<slug:slug>/', login_required(UserDelete.as_view()), name="user_delete"),
+    path('list/', login_required(UserList.as_view()), name="user_list"),
+    path('profile/', login_required(ProfileUpdate.as_view()), name="profile"),
+    path('profile/email/', login_required(EmailUpdate.as_view()), name="profile_email"),
+    path('key_list/', login_required(KeyList.as_view()), name="key_list"),
+    path('key_create/', login_required(KeyCreate.as_view()), name="key_create"),
+    path('key_detail/<slug:slug>/', login_required(KeyDetail.as_view()), name="key_detail"),
+    path('key_delete/<slug:slug>/', login_required(KeyDelete.as_view()), name="key_delete"),
+    path('key_update/<slug:slug>/', login_required(KeyUpdate.as_view()), name="key_update"),
+    path('note_list/', login_required(NoteList.as_view()), name="note_list"),
+    path('note_create/', login_required(NoteCreate.as_view()), name="note_create"),
+    path('note_detail/<slug:slug>/', login_required(NoteDetail.as_view()), name="note_detail"),
+    path('note_delete/<slug:slug>/', login_required(NoteDelete.as_view()), name="note_delete"),
+    path('note_update/<slug:slug>/', login_required(NoteUpdate.as_view()), name="note_update"),
+]

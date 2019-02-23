@@ -1,0 +1,64 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load qr_code %}
+{% load core_tags %}
+{% block content %}
+<main role="main">
+  <div class="container">
+      <ol class="breadcrumb breadcrumb-right-arrow ">
+        <li class="breadcrumb-item"><a href=".">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_detail' backup.set.group.name|slugify %}">Sets</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'set_detail' backup.set.group.name|slugify backup.set.name|slugify %}">{{backup.set.name}}</a></li>
+        <li class="breadcrumb-item active">{{backup.name}}</li>
+    </ol>
+    <div class="row mt-3">
+        <div class="col-md-12 mx-auto text-center">
+            <h2 class="section-heading mb-2">
+                {{backup.name}}
+            </h2>
+     	    <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
+        </div>
+        <div class="col-md-12 mx-auto">
+            <div class="card mb-3">
+            <h5 class="card-header">Note</h5>
+                <div class="card-body">
+                <p class="card-text">
+                    {{backup.note}}
+                </p>
+                </div>
+            </div>
+            <div class="card mb-3">
+              <h5 class="card-header">Files</h5>
+              <div class="card-body">
+                <p class="card-text">
+                {% if backup.file.url != blanck %}
+                  <a href="{{backup.file.url}}">{{backup.file | getfilename}}</a>
+                {% else %}
+                  Empty
+                {% endif %}
+                </p>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qr-code">QR code</h5>
+                </div>
+                <div id="areaImprimir" class="modal-body mx-auto">
+                    {% backup_url request.META.HTTP_HOST backup.id as backup_qr %}
+                    {% qr_from_text backup_qr size="M" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

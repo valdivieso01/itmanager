@@ -1,0 +1,64 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load qr_code %}
+{% load core_tags %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' guide.set.group.name|slugify %}">Sets</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' guide.set.group.name|slugify guide.set.name|slugify %}">{{object.name}}</a></li>
+            <li class="breadcrumb-item active">{{guide.name}}</li>
+        </ol>
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto text-center">
+                <h2 class="section-heading mb-4">
+                    {{guide.name}}
+                </h2>
+       	        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm">QR code</button>
+            </div>
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">Guide</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{guide.guide|safe}}
+                    </p>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                <h5 class="card-header">Files</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                        {% if guide.file.url != blanck %}
+                        <a href="{{guide.file.url}}">{{guide.file | getfilename}}</a>
+                        {% else %}
+                        Empty
+                        {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="qr-code">QR code</h5>
+                </div>
+                <div id="areaImprimir" class="modal-body mx-auto">
+                    {% guide_url request.META.HTTP_HOST guide.id as guide_qr %}
+                    {% qr_from_text guide_qr size="M" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

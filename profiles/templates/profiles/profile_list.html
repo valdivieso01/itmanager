@@ -1,0 +1,96 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+
+<main role="main">
+  <div class="container">
+      <ol class="breadcrumb breadcrumb-right-arrow">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active">Profiles</li>
+      </ol>
+      <div class="row justify-content-center">
+          <div class="col-md">
+              <form class="" method="GET" action="">
+                <div class="row">
+                    <div class="col input-group">
+                        <input class="form-control" type="text" placeholder="Search user" name="q" value="{{ request.GET.q }}">
+                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+              </form>
+          </div>
+      </div>
+      <div class="row mt-3">
+        {% if request.GET.q != blanck %}
+          {% for profile in profile_list %}
+            {% if request.GET.q in profile.user.username %}
+                <div class="col-md mt-2 mb-3 ">
+                  <div class="row p-1">
+                    <div class="col-md-12 text-center">
+                        {% if profile.avatar %}
+                          <img src="{{profile.avatar.url}}" width="200" height="200" class="rounded-circle">
+                        {% else %}
+                          <img src="{% static 'registration/img/no-avatar.jpg' %}" width="200" height="200" class="rounded-circle">
+                        {% endif %}
+                        <p class="profile-data">
+                          <br><b>{{profile.user|truncatechars:"16"}}</b><br>
+                          <a href="{% url 'profiles:detail' profile.user %}">View</a>
+                        </p>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+          {% endfor %}
+        {% else %}
+          {% for profile in profile_list %}
+            <div class="col-md mt-2 mb-3 ">
+              <div class="row p-1">
+                <div class="col-md-12 text-center">
+                  {% if profile.avatar %}
+                    <img src="{{profile.avatar.url}}" width="200" height="200" class="rounded-circle">
+                  {% else %}
+                    <img src="{% static 'registration/img/no-avatar.jpg' %}" width="200" height="200" class="rounded-circle">
+                  {% endif %}
+                  <p class="profile-data">
+                    <br><b>{{profile.user|truncatechars:"16"}}</b><br>
+                    <a href="{% url 'profiles:detail' profile.user %}">View</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <!-- Menú de paginación -->
+      {% if is_paginated %}
+        <nav aria-label="Page navigation" class=" mb-5">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+              <li class="page-item ">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+              </li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+              <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+              </li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <li class="page-item ">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+  </div>
+</main>
+{% endblock %}

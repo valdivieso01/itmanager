@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveydevice_list.first.survey.set.group.name|slugify %}">Sets</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveydevice_list.first.survey.set.group.name|slugify surveydevice_list.first.survey.set.name|slugify %}">{{surveydevice_list.first.survey.set.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveydevice_list.first.survey.set.group.name|slugify surveydevice_list.first.survey.set.name|slugify surveydevice_list.first.survey.name|slugify %}">{{surveydevice_list.first.survey.name}}</a></li>
+            <li class="breadcrumb-item active">Survey Devices</li>
+        </ol>
+        {% for device in surveydevice_list %}
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">{{device.name}}</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            Ip: {{device.ip}}
+                        </p>
+                        <p class="card-text">
+                            Connection: {{device.connection}}
+                        </p>
+                        <p class="card-text">
+                            Username: {{device.username}}
+                        </p>
+                        <p class="card-text">
+                            Password: {{device.password}}
+                        </p>
+                        <p class="card-text">
+                            type: {{device.type}}
+                        </p>
+                        <p class="card-text">
+                            Observations: {{device.observations}}
+                        </p>
+                    </div>
+                    <a href="{% url 'surveydevice_update' device.survey.set.group.name|slugify device.survey.set.name|slugify device.survey.name|slugify device.name|slugify %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'surveydevice_delete' device.survey.set.group.name|slugify device.survey.set.name|slugify device.survey.name|slugify device.name|slugify %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

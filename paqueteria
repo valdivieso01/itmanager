@@ -1,0 +1,7 @@
+sudo apt-get install install python-devel
+sudo apt-get install python3-devel
+
+# Para django-extensions
+sudo apt-get install graphviz libgraphviz-dev graphviz-dev pkg-config
+pip install pygraphviz
+

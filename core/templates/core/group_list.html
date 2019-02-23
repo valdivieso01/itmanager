@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <ol class="breadcrumb breadcrumb-right-arrow">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active" >Groups</li>
+    </ol>
+    {% if 'created' in request.GET %}
+      <p class="text-center" style="color:green;">Group successfully created!</p>
+    {%  elif 'deleted' in request.GET %}
+      <p class="text-center" style="color:green;">Group successfully deleted!</p>
+    {%  elif 'edited' in request.GET %}
+      <p class="text-center" style="color:green;">Group successfully edited!</p>
+    {% endif %}
+    <div class="row">
+	{% if group_list %}
+        {% for group in group_list %}
+        <div class="col-md-4">
+          <div class="card-group">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <div class="row align-items-start">
+                            <div class="col-10">
+                                <div class="card-title title-cut"><strong>{{group.name}}</strong></div>
+                            </div>
+                            <div class="col-2">
+                                <i class="fa fa-ellipsis-v fa-border"type="button" data-toggle="dropdown"></i>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{% url 'group_update' group.name|slugify %}">Edit</a>
+                                    <a class="dropdown-item" href="{% url 'group_delete' group.name|slugify %}">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    {% if group.image %}
+                        <a href="{% url 'group_detail' group.name|slugify %}"><img src="{{group.image.url}}" width="300" height="300" class="card-img-top rounded-circle "></a>
+                    {% else %}
+                        <a href="{% url 'group_detail' group.name|slugify %}"><img src="{% static 'core/img/group-icon.png' %}" width="300" height="300" class="card-img-top rounded-circle "></a>
+                    {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        {% if group.description %}
+                            <p class="card-text text-center title-cut">{{group.description}}</p>
+                        {% else %}
+                            <p class="card-text text-center">No description </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+	{% endfor %}
+        {% else %}
+                <div class="col-md-12 text-center">Groups Empty, please create a new group using the button in the end of the page</div>
+        {% endif %}
+
+        </div>
+    </div>
+    <div id="container-floating">
+        <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add group">
+            <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'group_create' %}"><i class="fa fa-users"></i></a></p>
+        </div>
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
+            <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
+        </div>
+    </div>
+</main>
+{% endblock %}

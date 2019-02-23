@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<main role="main">
+  <div class="container">
+      <ol class="breadcrumb breadcrumb-right-arrow ">
+          <li class="breadcrumb-item"><a href=".">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'group_detail' surveydevice.survey.set.group.name|slugify %}">Sets</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'set_detail' surveydevice.survey.set.group.name|slugify surveydevice.survey.set.name|slugify %}">{{surveydevice.survey.set.name}}</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveydevice.survey.set.group.name|slugify surveydevice.survey.set.name|slugify surveydevice.survey.name|slugify %}">{{surveydevice.survey.name}}</a></li>
+          <li class="breadcrumb-item active">Edit device</li>
+      </ol>
+      <div class="row mt-3">
+        <div class="col-md-9 mx-auto">
+        {% if 'edited' in request.GET %}
+          <p style="color:green;">Survey device edited</p>
+        {% endif %}
+        {% crispy form %}
+        </div>
+      </div>
+  </div>
+</main>
+{% endblock %}

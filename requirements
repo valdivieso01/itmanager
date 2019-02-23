@@ -1,0 +1,7 @@
+pillow
+django-ckeditor
+django-qr-code
+django-crispy-forms
+django-encrypted-model-fields
+django-private-storage
+django-simple-history
