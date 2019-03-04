@@ -167,7 +167,7 @@ class KeyUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?created'
+        return reverse_lazy('key_update', args=[self.object.slug]) + '?edited'
 
 
 class KeyDelete(DeleteView):
@@ -258,7 +258,7 @@ class NoteUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?created'
+        return reverse_lazy('note_update', args=[self.object.slug]) + '?edited'
 
 
 class NoteDelete(DeleteView):

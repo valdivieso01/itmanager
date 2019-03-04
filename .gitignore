@@ -1,5 +1,8 @@
 tesis/settings.py
+tesis/settings.py.save
 db.sqlite3
 sqlite.db
 letsencrypt/
 logs/
+index.nginx-debian.html
+tesis/gunicorn

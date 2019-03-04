@@ -17,7 +17,8 @@
                 <h2 class="section-heading mb-4">
                     {{guide.name}}
                 </h2>
-       	        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm">QR code</button>
+                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
+                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
             </div>
             <div class="col-md-12 mx-auto">
                 <div class="card mb-3">
@@ -33,12 +34,26 @@
                     <div class="card-body">
                         <p class="card-text">
                         {% if guide.file.url != blanck %}
-                        <a href="{{guide.file.url}}">{{guide.file | getfilename}}</a>
+                        <a href="{{guide.file.url}}" download>{{guide.file | getfilename}}</a>
                         {% else %}
                         Empty
                         {% endif %}
                         </p>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-xs" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="info">Info</h5>
+                </div>
+                <div class="modal-content text-center">
+                     Created by {{guide.created_by}} on {{guide.created_at}}<br>
+                     Last edition by {{guide.last_modified_by}} on {{guide.last_modified_at}}   
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

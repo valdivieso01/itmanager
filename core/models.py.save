@@ -1,8 +1,5 @@
 import os
-from django.core.files import File
-from cryptography.fernet import Fernet
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -15,20 +12,29 @@ from private_storage.storage.files import PrivateFileSystemStorage
 from simple_history.models import HistoricalRecords
 
 storage2 = PrivateFileSystemStorage(
-    location='/home/ubuntu/tesis/media/group-private/',
+    location='/home/ubuntu/tesis/media/groups/',
     base_url='/group-private/'
 )
 
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
+import zlib
+import base64
 
 class CommonInfo(models.Model):
     created_at = models.DateTimeField("created_at", default=now, blank=True)
     last_modified_at = models.DateTimeField("last_modified_at", default=now, blank=True)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Created by", related_name="%(app_label)s_%(class)s_created", on_delete=models.CASCADE, null=True, blank=True)
-    last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Last modified by", related_name="%(app_label)s_%(class)s_last_modified", on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Created by",
+                                   related_name="%(app_label)s_%(class)s_created", on_delete=models.CASCADE, null=True,
+                                   blank=True)
+    last_modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name="Last modified by",
+                                         related_name="%(app_label)s_%(class)s_last_modified", on_delete=models.CASCADE,
+                                         null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.created_at:
             self.created_at = now()
+
         self.last_modified_at = now()
         super(CommonInfo, self).save(*args, **kwargs)
 
@@ -101,35 +107,61 @@ class Key(CommonInfo):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Key, self).save(*args, **kwargs)
-        if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
-            input_file = self.file.path
-            output_file = self.file.path
-            with open(input_file, 'rb') as f:
-                data = f.read()
-            fernet = Fernet(key)
-            encrypted = fernet.encrypt(data)
-            with open(output_file, 'wb') as f:
-                f.write(encrypted)
 
-#Antes usaba señales para cifrar archivos, ahora lo hago desde la funcion save
-#@receiver(post_save, sender=Key)
-#def save_key(sender, instance, **kwargs):
-#
-#    if instance.file:
-#        key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
-#        encrypted = ''
-#        input_file = instance.file.path
-#        print(input_file)
-#        output_file = instance.file.path
-#        with open(input_file, 'rb') as f:
-#            data = f.read()
-#        fernet = Fernet(key)
-#        encrypted = fernet.encrypt(data)
-#        print(encrypted)
-#        print("-------")
-#        with open(output_file, 'wb') as f:
-#            f.write(encrypted)
+	@receiver(post_save, sender=User)
+	def encrypt_blob(blob, public_key):
+	    #Import the Public Key and use for encryption using PKCS1_OAEP
+	    rsa_key = RSA.importKey(public_key)
+	    rsa_key = PKCS1_OAEP.new(rsa_key)
+
+	    #compress the data first
+	    blob = zlib.compress(blob)
+
+	    #In determining the chunk size, determine the private key length used in bytes
+	    #and subtract 42 bytes (when using PKCS1_OAEP). The data will be in encrypted
+	    #in chunks
+	    chunk_size = 470
+	    offset = 0
+	    end_loop = False
+	    encrypted =  ""
+
+	    while not end_loop:
+	        #The chunk
+	        chunk = blob[offset:offset + chunk_size]
+
+	        #If the data chunk is less then the chunk size, then we need to add
+	        #padding with " ". This indicates the we reached the end of the file
+	        #so we end loop here
+	        if len(chunk) % chunk_size != 0:
+	            end_loop = True
+	            chunk += " " * (chunk_size - len(chunk))
+
+	        #Append the encrypted chunk to the overall encrypted file
+	        encrypted += rsa_key.encrypt(chunk)
+
+	        #Increase the offset by chunk size
+	        offset += chunk_size
+
+	    #Base 64 encode the encrypted file
+	    return base64.b64encode(encrypted)
+
+	#Use the public key for encryption
+	fd = open("public_key.pem", "rb")
+	public_key = fd.read()
+	fd.close()
+
+	#Our candidate file to be encrypted
+	fd = open("img.jpg", "rb")
+	unencrypted_blob = fd.read()
+	fd.close()
+
+	encrypted_blob = encrypt_blob(unencrypted_blob, public_key)
+
+	#Write the encrypted contents to a file
+	fd = open("encrypted_img.jpg", "wb")
+	fd.write(encrypted_blob)
+	fd.close()
+
 
 
 def upload_guide(instance, filename):
@@ -178,16 +210,6 @@ class Backup(CommonInfo):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Backup, self).save(*args, **kwargs)
-        if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
-            input_file = self.file.path
-            output_file = self.file.path
-            with open(input_file, 'rb') as f:
-                data = f.read()
-            fernet = Fernet(key)
-            encrypted = fernet.encrypt(data)
-            with open(output_file, 'wb') as f:
-                f.write(encrypted)
 
 
 def upload_survey(instance, filename):
@@ -210,7 +232,7 @@ class Survey(CommonInfo):
     cuit = models.CharField(verbose_name="CUIT", max_length=50, blank=True, null=True)
     category = models.CharField(verbose_name="Category", max_length=50, blank=True, null=True)
     observations = models.TextField(verbose_name="Observation", max_length=200, blank=True, null=True)
-    file = PrivateFileField("File", storage=storage2, upload_to=upload_survey, blank=True, null=True)
+    file = PrivateFileField("File", storage=storage2, upload_to=upload_backup, blank=True, null=True)
     set = models.ForeignKey(Set, on_delete=models.CASCADE)
     slug = models.SlugField()
 
@@ -225,16 +247,6 @@ class Survey(CommonInfo):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Survey, self).save(*args, **kwargs)
-        if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
-            input_file = self.file.path
-            output_file = self.file.path
-            with open(input_file, 'rb') as f:
-                data = f.read()
-            fernet = Fernet(key)
-            encrypted = fernet.encrypt(data)
-            with open(output_file, 'wb') as f:
-                f.write(encrypted)
 
 
 class SurveyWorkStation(CommonInfo):

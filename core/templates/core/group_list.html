@@ -18,20 +18,20 @@
 	{% if group_list %}
         {% for group in group_list %}
         <div class="col-md-4">
-          <div class="card-group">
+            <div class="card-group">           
                 <div class="card mb-3">
                     <div class="card-header">
                         <div class="row align-items-start">
-                            <div class="col-10">
-                                <div class="card-title title-cut"><strong>{{group.name}}</strong></div>
-                            </div>
-                            <div class="col-2">
-                                <i class="fa fa-ellipsis-v fa-border"type="button" data-toggle="dropdown"></i>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="{% url 'group_update' group.name|slugify %}">Edit</a>
-                                    <a class="dropdown-item" href="{% url 'group_delete' group.name|slugify %}">Delete</a>
-                                </div>
-                            </div>
+                          <div class="col-10">
+                              <div class="card-title title-cut"><strong>{{group.name}}</strong></div>
+                          </div>
+                          <div class="col-2">
+                              <i class="fa fa-ellipsis-v fa-border"type="button" data-toggle="dropdown"></i>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                  <a class="dropdown-item" href="{% url 'group_update' group.name|slugify %}">Edit</a>
+                                  <a class="dropdown-item" href="{% url 'group_delete' group.name|slugify %}">Delete</a>
+                              </div>
+                          </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -49,14 +49,12 @@
                         {% endif %}
                     </div>
                 </div>
-            </div>
+	    </div>
+         </div>
 	{% endfor %}
         {% else %}
-                <div class="col-md-12 text-center">Groups Empty, please create a new group using the button in the end of the page</div>
+            <div class="col-md-12 text-center">Groups Empty, please create a new group using the button in the end of the page</div>
         {% endif %}
-
-        </div>
-    </div>
     <div id="container-floating">
         <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add group">
             <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'group_create' %}"><i class="fa fa-users"></i></a></p>
@@ -65,5 +63,6 @@
             <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
         </div>
     </div>
+  </div>
 </main>
 {% endblock %}

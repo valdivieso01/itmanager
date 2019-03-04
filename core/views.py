@@ -41,6 +41,11 @@ class GroupCreate(CreateView):
     model = Group
     form_class = GroupForm
 
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
         return reverse_lazy('group_list') + '?created'
 
@@ -105,6 +110,7 @@ class SetCreate(CreateView):
     form_class = SetForm
 
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         group_slug = self.kwargs['slug']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
         sets = form.instance.group.set_set.all()
@@ -186,6 +192,7 @@ class KeyCreate(CreateView):
     form_class = KeyForm
 
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
@@ -205,6 +212,12 @@ class KeyUpdate(UpdateView):
     form_class = KeyForm
     template_name_suffix = '_update_form'
 
+    #No hay que usar form_valid en update view, hace que se ejecute dos veces el guardado de modelo y como uso cifrado lo realiza 2 veces.
+    #def form_valid(self, form):
+        #form.instance.last_modified_by = self.request.user
+        #self.object = form.save()
+        #return super().form_valid(form)
+
     def get_queryset(self):
         return Key.objects.filter(set__group__members=self.request.user)
 
@@ -217,14 +230,15 @@ class KeyUpdate(UpdateView):
             queryset = Key.objects.get(slug=self.kwargs['key'], set__group__slug=self.kwargs['slug'],
                                        set__slug=self.kwargs['set'], set__group__members=self.request.user)
 
+        context = {'las_modified_by': self.request.user.username}
+
         if not queryset:
             raise Http404
 
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('key_update',
-                            args=[self.object.set.group.slug, self.object.set.slug, self.object.slug]) + '?edited'
+        return reverse_lazy('key_update', args=[self.object.set.group.slug, self.object.set.slug, self.object.slug]) + '?edited'
 
 
 class KeyDelete(DeleteView):
@@ -282,6 +296,7 @@ class GuideCreate(CreateView):
     form_class = GuideForm
 
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
@@ -312,6 +327,8 @@ class GuideUpdate(UpdateView):
                              set__slug=self.kwargs['set'], set__group__members=self.request.user):
             queryset = Guide.objects.get(slug=self.kwargs['guide'], set__group__slug=self.kwargs['slug'],
                                          set__slug=self.kwargs['set'], set__group__members=self.request.user)
+
+        context = {'las_modified_by': self.request.user.username}
 
         if not queryset:
             raise Http404
@@ -378,6 +395,7 @@ class BackupCreate(CreateView):
     form_class = BackupForm
 
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
@@ -408,6 +426,8 @@ class BackupUpdate(UpdateView):
                               set__slug=self.kwargs['set'], set__group__members=self.request.user):
             queryset = Backup.objects.get(slug=self.kwargs['backup'], set__group__slug=self.kwargs['slug'],
                                           set__slug=self.kwargs['set'], set__group__members=self.request.user)
+
+        context = {'las_modified_by': self.request.user.username}
 
         if not queryset:
             raise Http404
@@ -474,6 +494,7 @@ class SurveyCreate(CreateView):
     form_class = SurveyForm
 
     def form_valid(self, form):
+        form.instance.created_by = self.request.user
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
@@ -504,6 +525,8 @@ class SurveyUpdate(UpdateView):
                               set__slug=self.kwargs['set'], set__group__members=self.request.user):
             queryset = Survey.objects.get(slug=self.kwargs['survey'], set__group__slug=self.kwargs['slug'],
                                           set__slug=self.kwargs['set'], set__group__members=self.request.user)
+
+        context = {'las_modified_by': self.request.user.username}
 
         if not queryset:
             raise Http404
@@ -594,6 +617,8 @@ class SurveyUserUpdate(UpdateView):
 
         if SurveyUser.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyuser'], survey__set__group__members=self.request.user):
             queryset = SurveyUser.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyuser'], survey__set__group__members=self.request.user)
+
+        context = {'las_modified_by': self.request.user.username}
 
         if not queryset:
             raise Http404
@@ -688,6 +713,8 @@ class SurveyWorkStationUpdate(UpdateView):
         if SurveyWorkStation.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyworkstation'], survey__set__group__members=self.request.user):
             queryset = SurveyWorkStation.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyworkstation'], survey__set__group__members=self.request.user)
 
+        context = {'las_modified_by': self.request.user.username}
+
         if not queryset:
             raise Http404
 
@@ -779,6 +806,8 @@ class SurveyServerUpdate(UpdateView):
         if SurveyServer.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyserver'], survey__set__group__members=self.request.user):
             queryset = SurveyServer.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveyserver'], survey__set__group__members=self.request.user)
 
+        context = {'las_modified_by': self.request.user.username}
+
         if not queryset:
             raise Http404
 
@@ -869,6 +898,8 @@ class SurveyDeviceUpdate(UpdateView):
 
         if SurveyDevice.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveydevice'], survey__set__group__members=self.request.user):
             queryset = SurveyDevice.objects.get(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], slug=self.kwargs['surveydevice'], survey__set__group__members=self.request.user)
+
+        context = {'las_modified_by': self.request.user.username}
 
         if not queryset:
             raise Http404

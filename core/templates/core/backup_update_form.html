@@ -11,22 +11,6 @@
       <li class="breadcrumb-item"><a href="{% url 'set_detail' backup.set.group.name|slugify backup.set.name|slugify %}">{{backup.set.name}}</a></li>
       <li class="breadcrumb-item active">{{backup.name}}</li>
     </ol>
-    <!--<div class="row mt-3">
-      <div class="col-md-9 mx-auto">
-          {% if 'edited' in request.GET %}
-            <p style="color:green;">Backup edited</p>
-          {% endif %}
-          <div>
-            <form action="" method="post">{% csrf_token %}
-              {{ form.as_p }}
-                <div class="text-center">
-                  <input type="submit" class="btn btn-primary btn-block"value="Edit" />
-                  <a class="btn btn-primary btn-block" href="{% url 'set_detail' object.set.group.slug object.set.slug %}">Back</a>
-                </div>
-            </form>
-          </div>
-      </div>
-    </div>-->
    <div class="row mt-3">
       <div class="col-md-9 mx-auto">
         {% if 'edited' in request.GET %}

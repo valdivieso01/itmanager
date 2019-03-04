@@ -1,4 +1,9 @@
 import os
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from cryptography.fernet import Fernet
+
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -14,7 +19,7 @@ from private_storage.fields import PrivateFileField
 
 
 storage1 = PrivateFileSystemStorage(
-    location='/home/ubuntu/tesis/media/users/',
+    location='/home/ubuntu/tesis/media/user-private/',
     base_url='/user-private/'
 )
 
@@ -91,6 +96,23 @@ class Key(CommonInfo):
         super(Key, self).save(*args, **kwargs)
 
 
+@receiver(post_save, sender=Key)
+def save_key(sender, instance, **kwargs):
+
+    if instance.file:
+        key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
+        input_file = instance.file.path
+        output_file = instance.file.path
+        print(input_file)
+        with open(input_file, 'rb') as f:
+            data = f.read()
+        fernet = Fernet(key)
+        encrypted = fernet.encrypt(data)
+        print(encrypted)
+        with open(output_file, 'wb') as f:
+            f.write(encrypted)
+
+
 def upload_note(instance, filename):
     return os.path.join("%s/" % instance.profile.user, "notes/", filename)
 
@@ -113,3 +135,21 @@ class Note(CommonInfo):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Note, self).save(*args, **kwargs)
+
+
+@receiver(post_save, sender=Note)
+def save_note(sender, instance, **kwargs):
+    if instance.file:
+        key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
+        input_file = instance.file.path
+        output_file = instance.file.path
+
+        with open(input_file, 'rb') as f:
+            data = f.read()
+
+        fernet = Fernet(key)
+        encrypted = fernet.encrypt(data)
+
+        with open(output_file, 'wb') as f:
+            f.write(encrypted)
+

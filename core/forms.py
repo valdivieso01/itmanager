@@ -67,29 +67,41 @@ class KeyForm(forms.ModelForm):
     class Meta:
         model = Key
 
-        exclude = [
-            'created_by',
-            'last_modified_at',
-            'created_at',
-            'last_modified_by',
-            'set',
-            'slug',
+        fields = [
+            'name',
+            'username',
+            'password',
+            'note',
+            'url',
+            'file',
         ]
 
         labels = {
-
+            'name': '',
+            'username': '',
+            'password': '',
+            'note': '',
+            'url': '',
+            'file': '',
         }
 
         widgets = {
-
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
+            'password': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+            'note': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Note'}),
+            'url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'URL'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_id = 'key-form'
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Accept'))
-        self.helper.add_input(Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))
 
 
 class GuideForm(forms.ModelForm):

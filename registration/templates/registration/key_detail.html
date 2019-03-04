@@ -15,8 +15,9 @@
                     {{key.name}}
                 </h2>
 		<a class="btn btn-primary mb-2" href="mailto:email@example.com?subject={{key.name}}&body=Username:{{key.username}}%0APassword:{{key.password}}%0ANote:{{key.note}}%0AURL:{{key.url}}"><i class="fas fa-envelope-square"></i></a>
+                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fas fa-history"></i></button>
             </div>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-6">
                 <div class="card mb-3">
                 <h5 class="card-header">Username</h5>
                     <div class="card-body">
@@ -25,6 +26,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6">  
                 <div class="card mb-3">
                 <h5 class="card-header">Password</h5>
                     <div class="card-body">
@@ -33,6 +36,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-12">
                 <div class="card mb-3">
                 <h5 class="card-header">Note</h5>
                     <div class="card-body">
@@ -54,34 +59,30 @@
                     <div class="card-body">
                         <p class="card-text">
                         {% if key.file.url != blanck %}
-                            <a href="{{key.file.url}}">{{key.file | getfilename}}</a>
+                            <a href="{{key.file.url}}" download>{{key.file | getfilename}}</a>
                         {% else %}
                             Empty
                         {% endif %}
                         </p>
                     </div>
                 </div>
-		Last edition at {{key.history.first.history_date}}
-                <a style="text-decoration:none" href="#" data-toggle="modal" data-target="#history-keys"><i class="material-icons">history</i></a></p>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="history-keys" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade bs-example-modal-md"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="history-keys">History Keys</h5>
                 </div>
-                <div id="history" class="modal-body mx-auto">
+                <div class="modal-body mx-auto">
                     {% for k in key.history.all %}
-		    {% if k.next_record %}
                     <p>
                         Date: {{k.history_date}}<br>
                         Username: {{k.username}}<br>
                         Password: {{k.password}}<br>
                         File:  <a href="{{k.file.url}}">{{k.file}}</a>
                     </p>
-		    {% endif %}
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
