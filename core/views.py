@@ -196,7 +196,7 @@ class KeyCreate(CreateView):
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.key_set.all():
                 if k.name == form.instance.name:
@@ -300,7 +300,7 @@ class GuideCreate(CreateView):
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.guide_set.all():
                 if k.name == form.instance.name:
@@ -399,7 +399,7 @@ class BackupCreate(CreateView):
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.backup_set.all():
                 if k.name == form.instance.name:
@@ -498,7 +498,7 @@ class SurveyCreate(CreateView):
         group_slug = self.kwargs['slug']
         set_slug = self.kwargs['set']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.survey_set.all():
                 if k.name == form.instance.name:
@@ -586,11 +586,14 @@ class SurveyUserCreate(CreateView):
         set_slug = self.kwargs['set']
         survey_slug = self.kwargs['survey']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
-        form.instance.survey = Survey.objects.get(slug=survey_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
+        form.instance.survey = Survey.objects.get(set__group__slug=group_slug, set__slug=set_slug, slug=survey_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.survey_set.all():
                 if k.set == form.instance.survey.set:
+                    for j in form.instance.survey.surveyuser_set.all():
+                        if j.name == form.instance.name:
+                            raise forms.ValidationError("Survey User exist")
                     self.object = form.save()
                     return HttpResponseRedirect(self.get_success_url())
                 else:
@@ -682,11 +685,14 @@ class SurveyWorkStationCreate(CreateView):
         set_slug = self.kwargs['set']
         survey_slug = self.kwargs['survey']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
-        form.instance.survey = Survey.objects.get(slug=survey_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
+        form.instance.survey = Survey.objects.get(set__group__slug=group_slug, set__slug=set_slug, slug=survey_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.survey_set.all():
                 if k.set == form.instance.survey.set:
+                    for j in form.instance.survey.surveyworkstation_set.all():
+                        if j.name == form.instance.name:
+                            raise forms.ValidationError("Survey Workstation exist")
                     self.object = form.save()
                     return HttpResponseRedirect(self.get_success_url())
                 else:
@@ -775,11 +781,14 @@ class SurveyServerCreate(CreateView):
         set_slug = self.kwargs['set']
         survey_slug = self.kwargs['survey']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
-        form.instance.survey = Survey.objects.get(slug=survey_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
+        form.instance.survey = Survey.objects.get(set__group__slug=group_slug, set__slug=set_slug, slug=survey_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.survey_set.all():
                 if k.set == form.instance.survey.set:
+                    for j in form.instance.survey.surveyserver_set.all():
+                        if j.name == form.instance.name:
+                            raise forms.ValidationError("Survey Server exist")
                     self.object = form.save()
                     return HttpResponseRedirect(self.get_success_url())
                 else:
@@ -868,11 +877,14 @@ class SurveyDeviceCreate(CreateView):
         set_slug = self.kwargs['set']
         survey_slug = self.kwargs['survey']
         form.instance.group = Group.objects.get(slug=group_slug, members=self.request.user)
-        form.instance.set = Set.objects.get(slug=set_slug)
-        form.instance.survey = Survey.objects.get(slug=survey_slug)
+        form.instance.set = Set.objects.get(group__slug=group_slug, slug=set_slug)
+        form.instance.survey = Survey.objects.get(set__group__slug=group_slug, set__slug=set_slug, slug=survey_slug)
         if form.instance.group == form.instance.set.group:
             for k in form.instance.set.survey_set.all():
                 if k.set == form.instance.survey.set:
+                    for j in form.instance.survey.surveydevice_set.all():
+                        if j.name == form.instance.name:
+                            raise forms.ValidationError("Survey Device exist")
                     self.object = form.save()
                     return HttpResponseRedirect(self.get_success_url())
                 else:

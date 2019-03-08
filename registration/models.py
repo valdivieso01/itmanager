@@ -100,15 +100,12 @@ class Key(CommonInfo):
 def save_key(sender, instance, **kwargs):
 
     if instance.file:
-        key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
         input_file = instance.file.path
         output_file = instance.file.path
-        print(input_file)
         with open(input_file, 'rb') as f:
             data = f.read()
-        fernet = Fernet(key)
+        fernet = Fernet(settings.SECRET_KEY)
         encrypted = fernet.encrypt(data)
-        print(encrypted)
         with open(output_file, 'wb') as f:
             f.write(encrypted)
 
@@ -140,14 +137,13 @@ class Note(CommonInfo):
 @receiver(post_save, sender=Note)
 def save_note(sender, instance, **kwargs):
     if instance.file:
-        key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
         input_file = instance.file.path
         output_file = instance.file.path
 
         with open(input_file, 'rb') as f:
             data = f.read()
 
-        fernet = Fernet(key)
+        fernet = Fernet(settings.SECRET_KEY)
         encrypted = fernet.encrypt(data)
 
         with open(output_file, 'wb') as f:

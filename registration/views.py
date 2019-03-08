@@ -49,17 +49,17 @@ class UserDelete(DeleteView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        queryset = User.objects.filter(username=self.kwargs['slug'])
+        queryset = User.objects.filter(username=self.kwargs['username'])
 
         if not queryset:
             raise Http404
 
-        context = {'user': self.kwargs['slug']}
+        context = {'user': self.kwargs['username']}
         return context
 
     def delete(self, request, *args, **kwargs):
 
-        queryset = User.objects.filter(username=self.kwargs['slug'])
+        queryset = User.objects.filter(username=self.kwargs['username'])
         queryset.delete()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -135,11 +135,7 @@ class KeyCreate(CreateView):
     form_class = KeyForm
 
     def form_valid(self, form):
-        #notes = Note.objects.filter(profile__user=self.request.user)
         form.instance.profile = Profile.objects.get(user=self.request.user)
-        #for n in notes:
-        #    if form.instance.name == n.name:
-        #        raise forms.ValidationError("Note exist")
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -177,19 +173,17 @@ class KeyDelete(DeleteView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        key_slug = self.kwargs['slug']
-
-        queryset = Key.objects.filter(slug=key_slug).filter(profile__user=self.request.user)
+        queryset = Key.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
 
         if not queryset:
             raise Http404
 
-        context = {'key': key_slug}
+        context = {'key': self.kwargs['slug']}
         return context
 
     def delete(self, request, *args, **kwargs):
 
-        queryset = Key.objects.filter(slug=slug).filter(profile__user=self.request.user)
+        queryset = Key.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
         queryset.delete()
 
         return HttpResponseRedirect(self.get_success_url())
@@ -226,11 +220,7 @@ class NoteCreate(CreateView):
     form_class = NoteForm
 
     def form_valid(self, form):
-        #notes = Note.objects.filter(profile__user=self.request.user)
         form.instance.profile = Profile.objects.get(user=self.request.user)
-        #for n in notes:
-        #    if form.instance.name == n.name:
-        #        raise forms.ValidationError("Note exist")
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -268,19 +258,17 @@ class NoteDelete(DeleteView):
         if queryset is None:
             queryset = self.get_queryset()
 
-        note_slug = self.kwargs['slug']
-
-        queryset = Note.objects.filter(slug=note_slug).filter(profile__user=self.request.user)
+        queryset = Note.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
 
         if not queryset:
             raise Http404
 
-        context = {'note': note_slug}
+        context = {'note': self.kwargs['slug']}
         return context
 
     def delete(self, request, *args, **kwargs):
 
-        queryset = Note.objects.filter(slug=note_slug).filter(profile__user=self.request.user)
+        queryset = Note.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
         queryset.delete()
 
         return HttpResponseRedirect(self.get_success_url())

@@ -7,7 +7,7 @@ from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, 
 urlpatterns = [
     path('', Login.as_view(), name="login"),
     path('create/', login_required(UserCreate.as_view()), name="user_create"),
-    path('delete/<slug:slug>/', login_required(UserDelete.as_view()), name="user_delete"),
+    path('delete/<username>/', login_required(UserDelete.as_view()), name="user_delete"),
     path('list/', login_required(UserList.as_view()), name="user_list"),
     path('profile/', login_required(ProfileUpdate.as_view()), name="profile"),
     path('profile/email/', login_required(EmailUpdate.as_view()), name="profile_email"),

@@ -29,7 +29,7 @@
                     <div class="card-body">
                     <p class="card-text">
                         {% if note.file.url != blanck %}
-                        <a href="{{note.file.url}}">{{note.file}}</a>
+                        <a href="{{note.file.url}}" download>{{note.file}}</a>
                         {% else %}
                         Empty
                         {% endif %}

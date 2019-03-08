@@ -12,7 +12,7 @@
       <div class="col-md-9 mx-auto">
         <div>
             <form action="" method="post">{% csrf_token %}
-                <p>Are you sure you want to delete "{{ object.note }}?"?</p>
+                <p>Are you sure you want to delete "{{ object.note }}"?</p>
                 <input type="submit" class="btn btn-primary btn-block"value="Yes" />
                 <a class="btn btn-primary btn-block" href="{% url 'note_list' %}">Back</a>
             </form>

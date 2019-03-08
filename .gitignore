@@ -3,6 +3,9 @@ tesis/settings.py.save
 db.sqlite3
 sqlite.db
 letsencrypt/
+core/migrations/
+registration/migrations/
+messenger/migrations/
 logs/
 index.nginx-debian.html
 tesis/gunicorn

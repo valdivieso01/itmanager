@@ -13,55 +13,54 @@
             <li class="breadcrumb-item"><a href="{% url 'set_detail' key.set.group.name|slugify key.set.name|slugify %}">{{key.set.name}}</a></li>
             <li class="breadcrumb-item active">{{key.name}}</li>
         </ol>
-       <div class="row mt-3">
+        <div class="row mt-3">
             <div class="col-md-12 mx-auto text-center">
                 <h2 class="section-heading mb-2">
                     {{key.name}}
                 </h2>
                 <a class="btn btn-primary mb-2" href="mailto:email@example.com?subject={{key.name}}&body=Username:{{key.username}}%0APassword:{{key.password}}%0ANote:{{key.note}}%0AURL:{{key.url}}"><i class="fas fa-envelope-square"></i></a>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fas fa-history"></i></button>
-		<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
+                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
             </div>
             <div class="col-md-6">
                 <div class="card mb-3">
-                <h5 class="card-header">Username</h5>
+                    <div class="card-header">
+                        <strong>Username</strong>
+                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p1')"><i class="fas fa-clipboard"></i></button>
+                    </div>
                     <div class="card-body">
-                    <p class="card-text">
-                        {{key.username}}
-                    </p>
+                        <div id="p1">{{key.username}}</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card mb-3">
-                <h5 class="card-header">Password</h5>
+                    <div class="card-header">
+                        <strong>Password</strong>
+                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p2')"><i class="fas fa-clipboard"></i></button>
+                    </div>
                     <div class="card-body">
-                    <p class="card-text">
-                        {{key.password}}
-                    </p>
+                        <div id="p2">{{key.password}}</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card mb-3">
-                <h5 class="card-header">Note</h5>
+                    <div class="card-header">
+                        <strong>URL</strong>
+                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p3')"><i class="fas fa-clipboard"></i></button>
+                    </div>
                     <div class="card-body">
-                    <p class="card-text">
-                        {{key.note}}
-                    </p>
+                        <div id="p3">{{key.url}}</div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="card mb-3">
-                <h5 class="card-header">URL</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {{key.url}}
-                    </p>
+                    <div class="card-header">
+                        <strong>File</strong>
                     </div>
-                </div>
-                <div class="card mb-3">
-                    <h5 class="card-header">File</h5>
                     <div class="card-body">
                         <p class="card-text">
                         {% if key.file.url != blanck %}
@@ -70,6 +69,16 @@
                             Empty
                         {% endif %}
                         </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <strong>Note</strong>
+                    </div>
+                    <div class="card-body">
+                        {{key.note}}
                     </div>
                 </div>
             </div>
@@ -128,5 +137,14 @@
             </div>
         </div>
     </div>
+<script>
+function copyToClipboard(element) {
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
+}
+</script>
 </main>
 {% endblock %}

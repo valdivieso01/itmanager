@@ -102,12 +102,11 @@ class Key(CommonInfo):
         self.slug = slugify(self.name)
         super(Key, self).save(*args, **kwargs)
         if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
             input_file = self.file.path
             output_file = self.file.path
             with open(input_file, 'rb') as f:
                 data = f.read()
-            fernet = Fernet(key)
+            fernet = Fernet(settings.SECRET_KEY)
             encrypted = fernet.encrypt(data)
             with open(output_file, 'wb') as f:
                 f.write(encrypted)
@@ -154,6 +153,15 @@ class Guide(CommonInfo):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Guide, self).save(*args, **kwargs)
+        if self.file:
+            input_file = self.file.path
+            output_file = self.file.path
+            with open(input_file, 'rb') as f:
+                data = f.read()
+            fernet = Fernet(settings.SECRET_KEY)
+            encrypted = fernet.encrypt(data)
+            with open(output_file, 'wb') as f:
+                f.write(encrypted)
 
 
 def upload_backup(instance, filename):
@@ -179,12 +187,11 @@ class Backup(CommonInfo):
         self.slug = slugify(self.name)
         super(Backup, self).save(*args, **kwargs)
         if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
             input_file = self.file.path
             output_file = self.file.path
             with open(input_file, 'rb') as f:
                 data = f.read()
-            fernet = Fernet(key)
+            fernet = Fernet(settings.SECRET_KEY)
             encrypted = fernet.encrypt(data)
             with open(output_file, 'wb') as f:
                 f.write(encrypted)
@@ -226,19 +233,18 @@ class Survey(CommonInfo):
         self.slug = slugify(self.name)
         super(Survey, self).save(*args, **kwargs)
         if self.file:
-            key = "hIgxKFW5_BIEi2NL3I_Sg3HEj8Xk-RO0ug3lSc7q9a0="
             input_file = self.file.path
             output_file = self.file.path
             with open(input_file, 'rb') as f:
                 data = f.read()
-            fernet = Fernet(key)
+            fernet = Fernet(settings.SECRET_KEY)
             encrypted = fernet.encrypt(data)
             with open(output_file, 'wb') as f:
                 f.write(encrypted)
 
 
 class SurveyWorkStation(CommonInfo):
-    number = models.CharField(verbose_name="Number", max_length=50)
+    name = models.CharField(verbose_name="Name", max_length=50)
     user = models.CharField(verbose_name="User", max_length=50, blank=True, null=True)
     charge = models.CharField(verbose_name="Charge", max_length=50, blank=True, null=True)
     telephone = models.CharField(verbose_name="Telephone", max_length=50, blank=True, null=True)
@@ -261,10 +267,10 @@ class SurveyWorkStation(CommonInfo):
         ordering = ['last_modified_at']
 
     def __str__(self):
-        return self.number
+        return self.name
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.number)
+        self.slug = slugify(self.name)
         super(SurveyWorkStation, self).save(*args, **kwargs)
 
 
