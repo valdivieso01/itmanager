@@ -28,9 +28,6 @@ class GroupForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        Layout(
-            PrependedText('password', '@', placeholder="password", autocomplete='off')
-        )
         self.helper.add_input(Submit('submit', 'Accept'))
         self.helper.add_input(
             Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))

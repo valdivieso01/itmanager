@@ -9,3 +9,4 @@ messenger/migrations/
 logs/
 index.nginx-debian.html
 tesis/gunicorn
+media/
