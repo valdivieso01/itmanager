@@ -28,6 +28,9 @@ class GroupForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = 'post'
+        Layout(
+            PrependedText('password', '@', placeholder="password", autocomplete='off')
+        )
         self.helper.add_input(Submit('submit', 'Accept'))
         self.helper.add_input(
             Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))
@@ -77,7 +80,7 @@ class KeyForm(forms.ModelForm):
         ]
 
         labels = {
-            'name': '',
+            'name': 'Name',
             'username': '',
             'password': '',
             'note': '',
@@ -88,7 +91,7 @@ class KeyForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Username'}),
-            'password': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
             'note': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Note'}),
             'url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'URL'}),
             'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),

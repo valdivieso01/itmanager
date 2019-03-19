@@ -8,7 +8,6 @@ function printDiv(nombreDiv) {
 
        document.body.innerHTML = contenidoOriginal;
 }
-$('.collapse').collapse()
 
 $("#main").click(function() {
   $("#mini-fab").toggleClass('hidden');
@@ -17,7 +16,6 @@ $("#main").click(function() {
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();  
 });
-$.material.init();
 
 $().ready(function () {
   $('.modal.printable').on('shown.bs.modal', function () {

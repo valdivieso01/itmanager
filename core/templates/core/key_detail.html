@@ -5,6 +5,7 @@
 {% load core_tags %}
 {% block content %}
 <main role="main">
+</style>
     <div class="container">
         <ol class="breadcrumb breadcrumb-right-arrow ">
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -38,10 +39,12 @@
                 <div class="card mb-3">
                     <div class="card-header">
                         <strong>Password</strong>
-                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p2')"><i class="fas fa-clipboard"></i></button>
+                        <button type="button" class="btn btn-primary btn-sm ml-1" style="float: right;" onclick="copyToClipboard('#p2')"><i class="fas fa-clipboard"></i></button>
+			<button type="button" class="btn btn-primary btn-sm" style="float: right;" id="show-pass"><i class="fas fa-eye" id="sh"></i></a></button>
                     </div>
                     <div class="card-body">
-                        <div id="p2">{{key.password}}</div>
+                        <input style="border: none;" id="id_password" type="password" value="{{key.password}}" class="nothing">
+                        <div id="p2" style="display: none !important;">{{key.password}}</div>
                     </div>
                 </div>
             </div>
@@ -138,13 +141,22 @@
         </div>
     </div>
 <script>
-function copyToClipboard(element) {
+  function copyToClipboard(element) {
   var $temp = $("<input>");
   $("body").append($temp);
   $temp.val($(element).text()).select();
   document.execCommand("copy");
   $temp.remove();
-}
+  }
+  $(document).ready(function () {
+    $('#show-pass').click(function () {
+      if ($('#id_password').attr('type') === 'password') {
+        $('#id_password').attr('type', 'text');
+      } else {
+        $('#id_password').attr('type', 'password');
+      }
+    });
+  });
 </script>
 </main>
 {% endblock %}

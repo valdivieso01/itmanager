@@ -8,16 +8,14 @@ function printDiv(nombreDiv) {
 
        document.body.innerHTML = contenidoOriginal;
 }
-$('.collapse').collapse()
 
 $("#main").click(function() {
   $("#mini-fab").toggleClass('hidden');
 });
 
 $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();  
+    $('[data-toggle="tooltip"]').tooltip();
 });
-$.material.init();
 
 $().ready(function () {
   $('.modal.printable').on('shown.bs.modal', function () {
@@ -32,3 +30,33 @@ $().ready(function () {
       $('body').removeClass('modalprinter');
   });
 });
+
+$(document).ready(function () {
+  var trigger = $('.hamburger'),
+      overlay = $('.overlay'),
+     isClosed = true;
+
+    trigger.click(function () {
+      hamburger_cross();
+    });
+
+    function hamburger_cross() {
+
+      if (isClosed == true) {
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
+  }
+
+  $('[data-toggle="offcanvas"]').click(function () {
+        $('#wrapper').toggleClass('toggled');
+  });
+});
+

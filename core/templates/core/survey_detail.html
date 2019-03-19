@@ -27,7 +27,17 @@
 		<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
             </div>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-6 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">Company</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{survey.company}}
+                    </p>
+                    </div>
+                </div>	
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Responsable</h5>
                     <div class="card-body">
@@ -36,14 +46,8 @@
                     </p>
                     </div>
                 </div>
-                <div class="card mb-3">
-                <h5 class="card-header">Company</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {{survey.company}}
-                    </p>
-                    </div>
-                </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Address</h5>
                     <div class="card-body">
@@ -52,6 +56,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Telephone</h5>
                     <div class="card-body">
@@ -60,6 +66,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Email</h5>
                     <div class="card-body">
@@ -68,6 +76,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Webpage</h5>
                     <div class="card-body">
@@ -76,14 +86,8 @@
                     </p>
                     </div>
                 </div>
-                <div class="card mb-3">
-                <h5 class="card-header">Person in charge</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {{survey.person_incharge}}
-                    </p>
-                    </div>
-                </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Workhours</h5>
                     <div class="card-body">
@@ -92,14 +96,8 @@
                     </p>
                     </div>
                 </div>
-                <div class="card mb-3">
-                <h5 class="card-header">Downtime</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {{survey.downtime}}
-                    </p>
-                    </div>
-                </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Business Name</h5>
                     <div class="card-body">
@@ -108,6 +106,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Tax Residence</h5>
                     <div class="card-body">
@@ -116,6 +116,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+	    <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">CUIT</h5>
                     <div class="card-body">
@@ -124,6 +126,8 @@
                     </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Cartegory</h5>
                     <div class="card-body">
@@ -132,14 +136,8 @@
                     </p>
                     </div>
                 </div>
-                <div class="card mb-3">
-                <h5 class="card-header">Observations</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {{survey.observations}}
-                    </p>
-                    </div>
-                </div>
+	    </div>
+            <div class="col-md-6 mx-auto">
                 <div class="card mb-3">
                 <h5 class="card-header">Files</h5>
                     <div class="card-body">
@@ -152,6 +150,18 @@
                         </p>
                     </div>
                 </div>
+	    </div>
+            <div class="col-md-12 mx-auto">
+                <div class="card mb-3">
+                <h5 class="card-header">Observations</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {{survey.observations}}
+                    </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mx-auto">
                 <div class="card mb-3 text-center">
                     <!--<div class="row">-->
                         {% if survey.surveyuser_set.all %}
@@ -176,10 +186,8 @@
 			{% endif %}
 		    </div>
                 </div>
+	    </div>
                 <div id="container-floating">
-                  <div class="nd5 nds" data-toggle="tooltip" data-placement="left" title="Show QR">
-                      <p class="letter"><a style="text-decoration:none;color:white" href="#" data-toggle="modal" data-target="#qr-code"><i class="fa fa-qrcode"></i></a></p>
-                  </div>
                   <div class="nd4 nds" data-toggle="tooltip" data-placement="left" title="Add user">
                       <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'surveyuser_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}"><i class="fa fa-user"></i></a></p>
                   </div>

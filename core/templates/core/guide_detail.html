@@ -3,6 +3,9 @@
 {% load qr_code %}
 {% load core_tags %}
 {% block content %}
+<style>
+.scroll {overflow: auto; white-space: nowrap;}
+</style>
 <main role="main">
     <div class="container">
         <ol class="breadcrumb breadcrumb-right-arrow ">
@@ -21,13 +24,15 @@
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
             </div>
             <div class="col-md-12 mx-auto">
-                <div class="card mb-3">
+		<div class="card mb-3">
                 <h5 class="card-header">Guide</h5>
                     <div class="card-body">
+			<div class="scroll">
                     <p class="card-text">
                         {{guide.guide|safe}}
                     </p>
                     </div>
+			</div>
                 </div>
                 <div class="card mb-3">
                 <h5 class="card-header">Files</h5>

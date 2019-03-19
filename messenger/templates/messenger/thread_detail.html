@@ -19,7 +19,7 @@
       <div class="col-md-9 mx-auto mb-5">
         <div class="row">
           <!-- Hilos de conversación -->
-          <div class="col-md-4">
+          <div class="col-md-4  d-none d-lg-block">
             <!-- Con una búsqueda inversa user.threads también podemos conseguir los hilos de un usuario -->
             {% for thread in request.user.threads.all %}
               <!-- Sólo mostraremos un Thread si tiene como mínimo 1 mensaje -->
