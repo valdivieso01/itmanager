@@ -1,0 +1,6 @@
+        {% crispy form %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

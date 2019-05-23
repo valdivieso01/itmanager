@@ -1,6 +1,9 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+.scroll {overflow: auto; white-space: nowrap;}
+</style>
 <main role="main">
     <div class="container">
         <ol class="breadcrumb breadcrumb-right-arrow ">
@@ -10,18 +13,19 @@
         </ol>
         <div class="row mt-3">
             <div class="col-md-12 mx-auto text-center">
-                <h2 class="section-heading mb-2">
+                <h2 class="section-heading">
                     {{note.name}}
                 </h2>
-		<a class="btn btn-primary mb-2" href="mailto:email@example.com?subject={{note.name}}&body={{note.note}}"><i class="fas fa-envelope-square"></i></a>
             </div>
-            <div class="col-md-12 mx-auto">
+            <div class="col-md-12 mx-auto mt-2">
                 <div class="card mb-3">
                 <h5 class="card-header">Note</h5>
                     <div class="card-body">
-                    <p class="card-text">
-                        {{note.note|safe}}
-                    </p>
+			<div class="scroll">
+				<p class="card-text">
+                        	{{note.note|safe}}
+                    		</p>
+			</div>
                     </div>
                 </div>
                 <div class="card mb-3">

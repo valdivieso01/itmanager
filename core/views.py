@@ -970,7 +970,7 @@ def search_qr_set(request, pk):
 def search_qr_key(request, pk):
     try:
         key = Key.objects.get(pk=pk)
-        set = Set.objects.get(slug=key.set.slug)
+        set = Set.objects.get(group=key.set.group, slug=key.set.slug)
         group = Group.objects.get(slug=set.group.slug)
         url = 'https://itmanager.site/key_detail/'+group.slug+'/'+set.slug+'/'+key.slug
     except Set.DoesNotExist:
@@ -980,7 +980,7 @@ def search_qr_key(request, pk):
 def search_qr_backup(request, pk):
     try:
         backup = Backup.objects.get(pk=pk)
-        set = Set.objects.get(slug=backup.set.slug)
+        set = Set.objects.get(group=backup.set.group, slug=backup.set.slug)
         group = Group.objects.get(slug=set.group.slug)
         url = 'https://itmanager.site/backup_detail/'+group.slug+'/'+set.slug+'/'+backup.slug
     except Set.DoesNotExist:
@@ -990,7 +990,7 @@ def search_qr_backup(request, pk):
 def search_qr_guide(request, pk):
     try:
         guide = Guide.objects.get(pk=pk)
-        set = Set.objects.get(slug=guide.set.slug)
+        set = Set.objects.get(group=guide.set.group, slug=guide.set.slug)
         group = Group.objects.get(slug=set.group.slug)
         url = 'https://itmanager.site/guide_detail/'+group.slug+'/'+set.slug+'/'+guide.slug
     except Set.DoesNotExist:
@@ -1000,7 +1000,7 @@ def search_qr_guide(request, pk):
 def search_qr_survey(request, pk):
     try:
         survey = Survey.objects.get(pk=pk)
-        set = Set.objects.get(slug=survey.set.slug)
+        set = Set.objects.get(group=survey.set.group, slug=survey.set.slug)
         group = Group.objects.get(slug=set.group.slug)
         url = 'https://itmanager.site/survey_detail/'+group.slug+'/'+set.slug+'/'+survey.slug
     except Set.DoesNotExist:

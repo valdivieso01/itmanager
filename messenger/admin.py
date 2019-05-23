@@ -2,10 +2,10 @@ from django.contrib import admin
 from .models import Message, ThreadManager, Thread
 
 class MessageAdmin(admin.ModelAdmin):
-    exclude = ('')
+    include = ('*')
 
 class ThreadAdmin(admin.ModelAdmin):
-    exclude = ('')
+    include = ('*')
 
 admin.site.register(Message, MessageAdmin)
 

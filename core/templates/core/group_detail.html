@@ -34,7 +34,7 @@
             {% if request.GET.q != blanck %}
                 {% for set in group.set_set.all %}
                     {% if request.GET.q in set.name %}
-                    <div class="card mb-3">
+                    <div class="card">
                         <h5 class="card-header">
                           <div class="row align-items-center">
                               <div class="col title-cut">
@@ -52,7 +52,7 @@
                 {% endfor %}
             {% else %}
                 {% for set in group.set_set.all %}
-                <div class="card mb-3">
+                <div class="card">
                     <h5 class="card-header">
                       <div class="row align-items-center">
                           <div class="col title-cut">

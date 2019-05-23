@@ -5,6 +5,7 @@ from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, 
     NoteDetail, NoteDelete, NoteUpdate, NoteList, KeyList, UserDelete, UserList, UserCreate, Login
 
 urlpatterns = [
+
     path('', Login.as_view(), name="login"),
     path('create/', login_required(UserCreate.as_view()), name="user_create"),
     path('delete/<username>/', login_required(UserDelete.as_view()), name="user_delete"),

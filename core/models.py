@@ -36,12 +36,18 @@ class CommonInfo(models.Model):
         abstract = True
 
 
+def custom_upload_to(instance, filename):
+    old_instance = Group.objects.get(pk=instance.pk)
+    old_instance.image.delete()
+    return 'images/' + filename
+
+
 class Group(CommonInfo):
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=100, blank=True)
     members = models.ManyToManyField(User)
     slug = models.SlugField(unique=True)
-    image = models.ImageField(upload_to='images/', blank=True)
+    image = models.ImageField(upload_to=custom_upload_to, blank=True, null=True)
 
     class Meta:
         verbose_name = "Group"

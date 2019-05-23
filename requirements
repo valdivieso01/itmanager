@@ -7,3 +7,4 @@ django-encrypted-model-fields
 django-private-storage
 django-simple-history
 django-extensions
+django-favicon

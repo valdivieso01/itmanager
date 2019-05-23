@@ -12,12 +12,12 @@
             <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
             <li class="breadcrumb-item"><a href="{% url 'group_detail' guide.set.group.name|slugify %}">Sets</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'set_detail' guide.set.group.name|slugify guide.set.name|slugify %}">{{object.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' guide.set.group.name|slugify guide.set.name|slugify %}">{{object.set}}</a></li>
             <li class="breadcrumb-item active">{{guide.name}}</li>
         </ol>
         <div class="row mt-3">
             <div class="col-md-12 mx-auto text-center">
-                <h2 class="section-heading mb-4">
+                <h2 class="section-heading mb-2">
                     {{guide.name}}
                 </h2>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
