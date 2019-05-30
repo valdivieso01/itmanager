@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
-from .models import Key, Note
+from .models import Key, Note, Guide
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Button
 
@@ -57,19 +57,16 @@ class NoteForm(forms.ModelForm):
         fields = [
             'name',
             'note',
-            'file',
         ]
 
         labels = {
             'name': '',
             'note': '',
-            'file': '',
         }
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
-            'note': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Note'}),
-            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            #'note': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Note'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -80,6 +77,39 @@ class NoteForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', 'Accept'))
         self.helper.add_input(
             Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))
+
+
+class GuideForm(forms.ModelForm):
+    class Meta:
+        model = Guide
+
+        fields = [
+            'name',
+            'guide',
+            'file',
+        ]
+
+        labels = {
+            'name': '',
+            'guide': '',
+            'file': '',
+        }
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'guide': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Guide'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'guide-form'
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Accept'))
+        self.helper.add_input(
+            Button('cancel', 'Cancel', css_class='btn btn-secondary', onclick="window.history.back()"))
+
 
 
 class KeyForm(forms.ModelForm):

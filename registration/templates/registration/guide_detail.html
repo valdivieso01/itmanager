@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.scroll {overflow: auto; white-space: nowrap;}
+</style>
+<main role="main">
+    <div class="container">
+        <ol class="breadcrumb breadcrumb-right-arrow ">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guides</a></li>
+          <li class="breadcrumb-item active">{{guide.name}}</li>
+        </ol>
+        <div class="row mt-3">
+            <div class="col-md-12 mx-auto text-center">
+                <h2 class="section-heading">
+                    {{guide.name}}
+                </h2>
+            </div>
+            <div class="col-md-12 mx-auto mt-2">
+                <div class="card mb-3">
+                <h5 class="card-header">Guide</h5>
+                    <div class="card-body">
+			<div class="scroll">
+				<p class="card-text">
+                        	{{guide.guide|safe}}
+                    		</p>
+			</div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                <h5 class="card-header">File</h5>
+                    <div class="card-body">
+                    <p class="card-text">
+                        {% if guide.file.url != blanck %}
+                        <a href="{{guide.file.url}}" download>{{guide.file}}</a>
+                        {% else %}
+                        Empty
+                        {% endif %}
+                    </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

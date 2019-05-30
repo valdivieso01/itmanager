@@ -5,49 +5,48 @@
   <div class="container">
     <ol class="breadcrumb breadcrumb-right-arrow">
         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-        <li class="breadcrumb-item active" >Keys</li>
+        <li class="breadcrumb-item active" >Guides</li>
     </ol>
     <div class="row justify-content-center">
         <div class="col-md">
             <form class="" method="GET" action="">
                 <div class="row">
                     <div class="col input-group">
-                        <input class="form-control" type="text" placeholder="Search keys" name="q" value="{{ request.GET.q }}">
-                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button> 
+                        <input class="form-control" type="text" placeholder="Search guides" name="q" value="{{ request.GET.q }}">
+                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     {% if 'edited' in request.GET %}
-        <p class="text-center" style="color:green;">Key edited succefully</p>
+        <p class="text-center" style="color:green;">Note edited succefully</p>
     {% elif 'deleted' in request.GET %}
-        <p class="text-center" style="color:green;">Key deleted succefully</p>
+        <p class="text-center" style="color:green;">Note deleted succefully</p>
     {% elif 'created' in request.GET %}
-        <p class="text-center" style="color:green;">Key created succefully</p>
+        <p class="text-center" style="color:green;">Note created succefully</p>
     {% endif %}
-    {% if request.user.profile.key_set.all %}
+    {% if request.user.profile.guide_set.all %}
     <div class="row">
         <div class="col-md">
             {% if request.GET.q != blanck %}
-            {% for key in request.user.profile.key_set.all %}
-            {% if request.GET.q in key.name %}
+            {% for guide in request.user.profile.guide_set.all %}
+            {% if request.GET.q in guide.name %}
             <div class="row justify-content-center">
                 <div class="col-md">
                   <div class="card-group">
                     <div class="card">
-                      <h5 class="card-header title-cut">
+                      <h5 class="card-header">
                           <div class="row align-items-center">
                               <div class="col title-cut">
-                                <strong>{{key.name}}</strong>
+                                  <strong>{{guide.name}}</strong>
                               </div>
                               <div class="col-auto">
-                                  <a href="{% url 'key_detail' key.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'key_delete' key.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                  <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                  <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                  <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                               </div>
                           </div>
-                      </div>
                       </h5>
                     </div>
                   </div>
@@ -56,7 +55,7 @@
             {% endif %}
             {% endfor %}
             {% else %}
-            {% for key in request.user.profile.key_set.all %}
+            {% for guide in request.user.profile.guide_set.all %}
             <div class="row justify-content-center">
                 <div class="col-md">
                   <div class="card-group">
@@ -64,12 +63,12 @@
                       <h5 class="card-header">
                           <div class="row align-items-center">
                               <div class="col title-cut">
-                                <strong>{{key.name}}</strong>
+                                <strong>{{guide.name}}</strong>
                               </div>
                               <div class="col-auto">
-                                  <a href="{% url 'key_detail' key.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'key_delete' key.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                  <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                                  <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                  <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                               </div>
                           </div>
                       </h5>
@@ -82,11 +81,11 @@
         </div>
     </div>
     {% else %}
-        <div class="col-md-12 text-center">Keys Empty, please create a new key using the button in the end of the page</div>
+        <div class="col-md-12 text-center">Guides Empty, please create a new guides using the button in the end of the page</div>
     {% endif %}
       <div id="container-floating">
-          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add key">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'key_create' %}"><i class="fa fa-key"></i></a></p>
+          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add guide">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'guide_create' %}"><i class="fa fa-book"></i></a></p>
           </div>
           <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
               <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />

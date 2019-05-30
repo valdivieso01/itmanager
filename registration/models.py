@@ -110,14 +110,9 @@ def save_key(sender, instance, **kwargs):
             f.write(encrypted)
 
 
-def upload_note(instance, filename):
-    return os.path.join("%s/" % instance.profile.user, "notes/", filename)
-
-
 class Note(CommonInfo):
     name = models.CharField(verbose_name="Name", max_length=50, unique=True)
-    note = RichTextUploadingField(verbose_name="Text", blank=True, null=True)
-    file = PrivateFileField("File", storage=storage1, upload_to=upload_note, blank=True, null=True)
+    note = models.TextField(verbose_name="Note", max_length=200)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True)
 
@@ -134,8 +129,32 @@ class Note(CommonInfo):
         super(Note, self).save(*args, **kwargs)
 
 
-@receiver(post_save, sender=Note)
-def save_note(sender, instance, **kwargs):
+def upload_guide(instance, filename):
+    return os.path.join("%s/" % instance.profile.user, "guides/", filename)
+
+
+class Guide(CommonInfo):
+    name = models.CharField(verbose_name="Name", max_length=50, unique=True)
+    guide = RichTextUploadingField(verbose_name="Text", blank=True, null=True)
+    file = PrivateFileField("File", storage=storage1, upload_to=upload_guide, blank=True, null=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
+
+    class Meta:
+        verbose_name = "Guide"
+        verbose_name_plural = "Guides"
+        ordering = ['-last_modified_at']
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Guide, self).save(*args, **kwargs)
+
+
+@receiver(post_save, sender=Guide)
+def save_guide(sender, instance, **kwargs):
     if instance.file:
         input_file = instance.file.path
         output_file = instance.file.path

@@ -16,6 +16,7 @@
         <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
 	<link href="{% static 'core/img/favicon.png' %}" type="image/png" rel="icon">
 	<link href="{% static 'core/img/favicon.ico' %}" type="image/x-icon" rel="icon">
+	<title>IT Manager</title>
     </head>
     <body>
         {% if request.user.is_authenticated %}
@@ -120,10 +121,16 @@
                                         <span>Notes</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{% url 'guide_list' %}">
+                                        <i class="fa fa-book"></i>
+                                        <span>Guides</span>
+                                    </a>
+                                </li>
+                                {% if request.user.is_superuser %}
                                 <li class="header-menu">
                                     <span>Administration</span>
                                 </li>
-                                {% if request.user.is_superuser %}
                                 <li>
                                     <a href="{% url 'user_list' %}">
                                         <i class="fa fa-list-ul"></i>

@@ -1,8 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
-from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, KeyUpdate, NoteCreate, \
-    NoteDetail, NoteDelete, NoteUpdate, NoteList, KeyList, UserDelete, UserList, UserCreate, Login
+from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, KeyUpdate, NoteCreate, NoteDetail, NoteDelete, NoteUpdate, NoteList, KeyList, GuideDetail, GuideDelete, GuideUpdate, GuideList, GuideCreate, UserDelete, UserList, UserCreate, Login
 
 urlpatterns = [
 
@@ -22,4 +21,9 @@ urlpatterns = [
     path('note_detail/<slug:slug>/', login_required(NoteDetail.as_view()), name="note_detail"),
     path('note_delete/<slug:slug>/', login_required(NoteDelete.as_view()), name="note_delete"),
     path('note_update/<slug:slug>/', login_required(NoteUpdate.as_view()), name="note_update"),
+    path('guide_list/', login_required(GuideList.as_view()), name="guide_list"),
+    path('guide_create/', login_required(GuideCreate.as_view()), name="guide_create"),
+    path('guide_detail/<slug:slug>/', login_required(GuideDetail.as_view()), name="guide_detail"),
+    path('guide_delete/<slug:slug>/', login_required(GuideDelete.as_view()), name="guide_delete"),
+    path('guide_update/<slug:slug>/', login_required(GuideUpdate.as_view()), name="guide_update"),
 ]

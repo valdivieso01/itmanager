@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from .forms import UserCreationFormWithEmail, ProfileForm, EmailForm, NoteForm, KeyForm
+from .forms import UserCreationFormWithEmail, ProfileForm, EmailForm, NoteForm, KeyForm, GuideForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
-from .models import Profile, Note, Key, storage1
+from .models import Profile, Note, Key, Guide ,storage1
 from private_storage.views import PrivateStorageView
 from django.http import HttpResponseRedirect, Http404
 
@@ -275,3 +275,89 @@ class NoteDelete(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('note_list') + '?deleted'
+
+
+class GuideDetail(DetailView):
+    model = Guide
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if Guide.objects.get(slug=self.kwargs['slug'], profile__user=self.request.user):
+                queryset = Guide.objects.get(slug=self.kwargs['slug'], profile__user=self.request.user)
+
+        if not queryset:
+            raise Http404
+
+        return queryset
+
+
+class GuideList(ListView):
+    model = Guide
+
+    def get_queryset(self):
+        return Guide.objects.filter(profile__user=self.request.user)
+
+
+class GuideCreate(CreateView):
+    model = Guide
+    form_class = GuideForm
+
+    def form_valid(self, form):
+        form.instance.profile = Profile.objects.get(user=self.request.user)
+        self.object = form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('guide_list') + '?created'
+
+
+class GuideUpdate(UpdateView):
+    form_class = GuideForm
+    template_name_suffix = '_update_form'
+
+    def get_queryset(self):
+        return Note.objects.filter(profile__user=self.request.user)
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        if Guide.objects.get(slug=self.kwargs['slug'], profile__user=self.request.user):
+            queryset = Guide.objects.get(slug=self.kwargs['slug'], profile__user=self.request.user)
+
+        if not queryset:
+            raise Http404
+
+        return queryset
+
+    def get_success_url(self):
+        return reverse_lazy('guide_list') + '?edited'
+
+
+class GuideDelete(DeleteView):
+    model = Guide
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        queryset = Guide.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
+
+        if not queryset:
+            raise Http404
+
+        context = {'guide': self.kwargs['slug']}
+        return context
+
+    def delete(self, request, *args, **kwargs):
+
+        queryset = Guide.objects.filter(slug=self.kwargs['slug']).filter(profile__user=self.request.user)
+        queryset.delete()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse_lazy('guide_list') + '?deleted'
+
