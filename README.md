@@ -33,11 +33,15 @@ SECRET_KEY = 'KEY FOR FILES HERE'
 
 ALLOWED_HOSTS = ["PUBLIC IP","DOMAIN",]
 
-**Si se usa gunicorn**
+**Si se usa gunicorn configurar en settings.py**
 
 WSGI_APPLICATION = '"NAME APLICATION".wsgi.application'
 
-**Configuraciond e base de datos**
+**Para correr gunicorn usar comando dentro del directorio del servidor web (el comando incluye certificados ssl)**
+
+sudo gunicorn --certfile /etc/letsencrypt/live/itmanager.website/fullchain.pem --keyfile /etc/letsencrypt/live/itmanager.website/privkey.pem --bind 0.0.0.0:8000 tesis.wsgi:application
+
+**Configuracion de base de datos**
 
 DATABASES = {
     'default': {
@@ -78,3 +82,27 @@ storage1 = PrivateFileSystemStorage(
     location='/"PROJECT DIRECTORY"/media/group-private/',
     base_url='/group-private/'
 ) 
+
+**El servidor web (en este caso nginx) se configura de esta manera**
+
+server {
+        listen 443 ssl;
+        server_name itmanager.com 
+        root /var/www/html/tesis/;
+        ssl_certificate      /etc/letsencrypt/live/itmanager/fullchain.pem;
+        ssl_certificate_key  /etc/letsencrypt/live/itmanager/privkey.pem;
+        index index.html index.htm;
+        location /static/ {
+                alias /home/ubuntu/.../static/;
+        }
+        location /media/ {
+                alias /home/ubuntu/.../media/;
+        }
+
+        location / {
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_redirect off;
+            proxy_pass https://itmanager.com:8000;
+        }
+}
