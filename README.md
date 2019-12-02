@@ -8,7 +8,9 @@ sudo apt-get install graphviz libgraphviz-dev graphviz-dev pkg-config
 
 pip install django==2.1.3
 
-**Copiar proyecto en directoriod e servidor web**
+**Descargar repositorio en directorio de servidor web**
+
+git clone https://github.com/valdivieso01/itmanager
 
 **Instalar requerimientos con pip**
 
