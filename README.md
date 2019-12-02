@@ -1,25 +1,25 @@
 ## Sofware para gestion de documentacion ti en django
 
-**Install python and this software**
+**Isntalar python y demas programas**
 sudo apt-get install install python3 python3-devel python-devel python-pip
 sudo apt-get install graphviz libgraphviz-dev graphviz-dev pkg-config
 
-**install django v2**
+**Instalar django v2**
 
 pip install django==2.1.3
 
-**Copy project on webserver directory**
+**Copiar proyecto en directoriod e servidor web**
 
-**Install requirement on requirements file with pip**
+**Instalar requerimientos con pip**
 
 pip install -r rquirements
 
-**Run migrations**
+**Correr migraciones**
 
 python manage.py makemigrations
 python amnage.py migrate
 
-**Generate key**
+**Generar key de cifrado**
 
 python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 
