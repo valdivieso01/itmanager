@@ -84,7 +84,8 @@ storage1 = PrivateFileSystemStorage(
 ) 
 
 **El servidor web (en este caso nginx) se configura de esta manera**
-<
+
+```html
 server {
         listen 443 ssl;
         server_name itmanager.com 
@@ -106,4 +107,4 @@ server {
             proxy_pass https://itmanager.com:8000;
         }
 }
->
+
