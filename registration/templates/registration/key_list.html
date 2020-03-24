@@ -26,59 +26,31 @@
     {% elif 'created' in request.GET %}
         <p class="text-center" style="color:green;">Key created succefully</p>
     {% endif %}
-    {% if request.user.profile.key_set.all %}
+    {% if object_list %}
     <div class="row">
-        <div class="col-md">
-            {% if request.GET.q != blanck %}
-            {% for key in request.user.profile.key_set.all %}
-            {% if request.GET.q in key.name %}
-            <div class="row justify-content-center">
+      <div class="col-md">
+          {% for note in object_list %}
+              <div class="row justify-content-center">
                 <div class="col-md">
                   <div class="card-group">
                     <div class="card">
-                      <h5 class="card-header title-cut">
-                          <div class="row align-items-center">
-                              <div class="col title-cut">
-                                <strong>{{key.name}}</strong>
-                              </div>
-                              <div class="col-auto">
-                                  <a href="{% url 'key_detail' key.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'key_delete' key.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                              </div>
+                      <h5 class="card-header">
+                        <div class="row align-items-center">
+                          <div class="col title-cut">
+                            <strong>{{note.name}}</strong>
                           </div>
-                      </div>
+                          <div class="col-auto">
+                            <a href="{% url 'note_detail' note.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                            <a href="{% url 'note_update' note.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'note_delete' note.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                          </div>
+                        </div>
                       </h5>
                     </div>
                   </div>
                 </div>
               </div>
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            {% for key in request.user.profile.key_set.all %}
-            <div class="row justify-content-center">
-                <div class="col-md">
-                  <div class="card-group">
-                    <div class="card">
-                      <h5 class="card-header">
-                          <div class="row align-items-center">
-                              <div class="col title-cut">
-                                <strong>{{key.name}}</strong>
-                              </div>
-                              <div class="col-auto">
-                                  <a href="{% url 'key_detail' key.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'key_delete' key.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                              </div>
-                          </div>
-                      </h5>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            {% endfor %}
-            {% endif %}
+         {% endfor %}
         </div>
     </div>
     {% else %}

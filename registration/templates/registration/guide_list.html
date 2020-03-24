@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <main role="main">
-  <div class="container">
+  <div class="container ml-auto">
     <ol class="breadcrumb breadcrumb-right-arrow">
         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
         <li class="breadcrumb-item active" >Guides</li>
@@ -26,58 +26,31 @@
     {% elif 'created' in request.GET %}
         <p class="text-center" style="color:green;">Note created succefully</p>
     {% endif %}
-    {% if request.user.profile.guide_set.all %}
+    {% if object_list %}
     <div class="row">
-        <div class="col-md">
-            {% if request.GET.q != blanck %}
-            {% for guide in request.user.profile.guide_set.all %}
-            {% if request.GET.q in guide.name %}
-            <div class="row justify-content-center">
+      <div class="col-md">
+ 	  {% for guide in object_list %}
+              <div class="row justify-content-center">
                 <div class="col-md">
                   <div class="card-group">
                     <div class="card">
                       <h5 class="card-header">
-                          <div class="row align-items-center">
-                              <div class="col title-cut">
-                                  <strong>{{guide.name}}</strong>
-                              </div>
-                              <div class="col-auto">
-                                  <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                              </div>
+                        <div class="row align-items-center">
+                          <div class="col title-cut">
+                            <strong>{{guide.name}}</strong>
                           </div>
+                          <div class="col-auto">
+                            <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                            <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                          </div>
+                        </div>
                       </h5>
                     </div>
                   </div>
                 </div>
               </div>
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            {% for guide in request.user.profile.guide_set.all %}
-            <div class="row justify-content-center">
-                <div class="col-md">
-                  <div class="card-group">
-                    <div class="card">
-                      <h5 class="card-header">
-                          <div class="row align-items-center">
-                              <div class="col title-cut">
-                                <strong>{{guide.name}}</strong>
-                              </div>
-                              <div class="col-auto">
-                                  <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                                  <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                                  <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                              </div>
-                          </div>
-                      </h5>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            {% endfor %}
-            {% endif %}
+         {% endfor %}
         </div>
     </div>
     {% else %}

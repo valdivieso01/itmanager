@@ -127,12 +127,16 @@ class KeyList(ListView):
     model = Key
 
     def get_queryset(self):
-        return Key.objects.filter(profile__user=self.request.user)
+        if self.request.GET:
+            return  Key.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return  Key.objects.filter(profile__user=self.request.user)
 
 
 class KeyCreate(CreateView):
     model = Key
     form_class = KeyForm
+
 
     def form_valid(self, form):
         form.instance.profile = Profile.objects.get(user=self.request.user)
@@ -212,8 +216,10 @@ class NoteList(ListView):
     model = Note
 
     def get_queryset(self):
-        return Note.objects.filter(profile__user=self.request.user)
-
+        if self.request.GET:
+            return Note.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return Note.objects.filter(profile__user=self.request.user)
 
 class NoteCreate(CreateView):
     model = Note
@@ -297,7 +303,10 @@ class GuideList(ListView):
     model = Guide
 
     def get_queryset(self):
-        return Guide.objects.filter(profile__user=self.request.user)
+        if self.request.GET:
+            return  Guide.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return Guide.objects.filter(profile__user=self.request.user)
 
 
 class GuideCreate(CreateView):

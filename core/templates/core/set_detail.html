@@ -41,7 +41,11 @@
                 <div id="accordion">
                     <div class="card">
                         <div class="card-header text-center" id="headingOne">
-                            <h5 class="mb-0"><button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Keys</button></h5>
+                            <div class="mb-0">
+                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				<h5 class="card-text"><strong>Keys</strong></h5>
+			    </button>
+			    </div>
                         </div>
                     </div>
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
@@ -52,7 +56,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                      <strong>{{key.name}}</strong>
+                                      <h5 class="card-text"><strong>{{key.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'key_detail' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
@@ -70,7 +74,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                      <strong>{{key.name}}</strong>
+                                      <h5 class="card-text"><strong>{{key.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'key_detail' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
@@ -85,9 +89,9 @@
                     </div>
                     <div class="card">
                         <div class="card-header text-center" id="headingTwo">
-                          <h5 class="mb-0">
+                          <h4 class="mb-0">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                              Guides
+                              <h5 class="card-text"><strong>Guides</strong></h5>
                             </button>
                           </h5>
                         </div>
@@ -100,12 +104,12 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{guide.name}}</strong>
+                                    <h5 class="card-tetx"><strong>{{guide.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
-                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-ms"><i class="fa fa-eye"></i></a>
+                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-ms"><i class="fa fa-edit"></i></a>
+                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-ms"><i class="fa fa-trash"></i></a>
                                   </div>
                                 </div>
                             </div>
@@ -118,12 +122,12 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{guide.name}}</strong>
+                                    <h5 class="card-text"><strong>{{guide.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
-                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-ms"><i class="fa fa-eye"></i></a>
+                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-ms"><i class="fa fa-edit"></i></a>
+                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-ms"><i class="fa fa-trash"></i></a>
                                   </div>
                                 </div>
                             </div>
@@ -135,7 +139,7 @@
                         <div class="card-header text-center" id="headingThree">
                           <h5 class="mb-0">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                              Backups
+                              <h5 class="card-text"><strong>Backups</strong></h5>
                             </button>
                           </h5>
                         </div>
@@ -148,7 +152,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{backup.name}}</strong>
+                                    <h5 class="card-text"><strong>{{backup.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'backup_detail' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
@@ -166,7 +170,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{backup.name}}</strong>
+                                    <h5 class="card-text"><strong>{{backup.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'backup_detail' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
@@ -183,7 +187,7 @@
                         <div class="card-header text-center" id="headingFour">
                           <h5 class="mb-0">
                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                              Surveys
+                                 <h5 class="card-text"><strong>Surveys</strong></h5>
                             </button>
                           </h5>
                         </div>
@@ -196,7 +200,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{survey.name}}</strong>
+                                      <h5 class="card-text"><strong>{{survey.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'survey_detail' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
@@ -214,7 +218,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                   <div class="col title-cut">
-                                    <strong>{{survey.name}}</strong>
+                                    <h5 class="card-text"><strong>{{survey.name}}</strong></h5>
                                   </div>
                                   <div class="col-auto">
                                       <a href="{% url 'survey_detail' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
