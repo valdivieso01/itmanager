@@ -144,7 +144,7 @@ class KeyCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?created'
+        return reverse_lazy('key_list')
 
 
 class KeyUpdate(UpdateView):
@@ -167,7 +167,7 @@ class KeyUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?edited'
+        return reverse_lazy('key_list')
 
 
 class KeyDelete(DeleteView):
@@ -193,7 +193,7 @@ class KeyDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?deleted'
+        return reverse_lazy('key_list')
 
 
 class NoteDetail(DetailView):
@@ -231,7 +231,7 @@ class NoteCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?created'
+        return reverse_lazy('note_list')
 
 
 class NoteUpdate(UpdateView):
@@ -254,7 +254,7 @@ class NoteUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?edited'
+        return reverse_lazy('note_list')
 
 
 class NoteDelete(DeleteView):
@@ -280,7 +280,7 @@ class NoteDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?deleted'
+        return reverse_lazy('note_list')
 
 
 class GuideDetail(DetailView):
@@ -319,7 +319,7 @@ class GuideCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?created'
+        return reverse_lazy('guide_list')
 
 
 class GuideUpdate(UpdateView):
@@ -342,7 +342,7 @@ class GuideUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?edited'
+        return reverse_lazy('guide_list')
 
 
 class GuideDelete(DeleteView):
@@ -368,5 +368,5 @@ class GuideDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?deleted'
+        return reverse_lazy('guide_list')
 

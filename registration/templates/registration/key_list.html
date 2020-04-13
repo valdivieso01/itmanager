@@ -29,7 +29,7 @@
     {% if object_list %}
     <div class="row">
       <div class="col-md">
-          {% for note in object_list %}
+          {% for key in object_list %}
               <div class="row justify-content-center">
                 <div class="col-md">
                   <div class="card-group">
@@ -37,12 +37,12 @@
                       <h5 class="card-header">
                         <div class="row align-items-center">
                           <div class="col title-cut">
-                            <strong>{{note.name}}</strong>
+                            <strong>{{key.name}}</strong>
                           </div>
                           <div class="col-auto">
-                            <a href="{% url 'note_detail' note.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                            <a href="{% url 'note_update' note.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                            <a href="{% url 'note_delete' note.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                            <a href="{% url 'key_detail' key.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
+                            <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'key_delete' key.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                           </div>
                         </div>
                       </h5>
