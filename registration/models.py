@@ -19,7 +19,7 @@ from private_storage.fields import PrivateFileField
 
 
 storage1 = PrivateFileSystemStorage(
-    location='/home/ubuntu/tesis/media/user-private/',
+    location=os.path.join(getattr(settings, 'PRIVATE_STORAGE_ROOT', os.path.join(settings.BASE_DIR, 'media')), 'user-private'),
     base_url='/user-private/'
 )
 

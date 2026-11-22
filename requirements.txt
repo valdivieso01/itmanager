@@ -1,0 +1,12 @@
+Django>=2.1.3,<3.0
+pygraphviz
+pillow
+django-ckeditor
+django-qr-code
+django-crispy-forms
+django-encrypted-model-fields
+django-private-storage
+django-simple-history
+django-extensions
+django-favicon
+cryptography
