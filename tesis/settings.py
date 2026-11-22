@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'qr_code',
     'encrypted_model_fields',
     'crispy_forms',
+    'crispy_bootstrap4',
     'private_storage',
     'simple_history',
     'django_extensions',
@@ -150,7 +151,11 @@ PRIVATE_STORAGE_ROOT = os.environ.get('PRIVATE_STORAGE_ROOT', os.path.join(BASE_
 PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_authenticated'
 
 # Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = 'uploads/'

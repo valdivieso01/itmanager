@@ -1,6 +1,5 @@
-from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from django.urls import path, include
+from django.urls import path, include, re_path
 from ckeditor_uploader import views as uploader_views
 from django.views.decorators.cache import never_cache
 from registration.views import MyStorageView1
@@ -14,10 +13,10 @@ from .views import HomePage, KeyCreate, KeyDetail, \
 
 urlpatterns = [
     # path private files
-    url('^user-private/(?P<path>.*)$', MyStorageView1.as_view()),
-    url('^group-private/(?P<path>.*)$', MyStorageView2.as_view()),
-    url(r'^ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
-    url(r'^ckeditor/browse/', never_cache(uploader_views.browse), name='ckeditor_browse'),
+    re_path(r'^user-private/(?P<path>.*)$', MyStorageView1.as_view()),
+    re_path(r'^group-private/(?P<path>.*)$', MyStorageView2.as_view()),
+    re_path(r'^ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
+    re_path(r'^ckeditor/browse/', never_cache(uploader_views.browse), name='ckeditor_browse'),
     # path home
     path('', login_required(HomePage.as_view()), name="home"),
     # paths groups

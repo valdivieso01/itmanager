@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 from .views import ProfileUpdate, EmailUpdate, KeyCreate, KeyDetail, KeyDelete, KeyUpdate, NoteCreate, NoteDetail, NoteDelete, NoteUpdate, NoteList, KeyList, GuideDetail, GuideDelete, GuideUpdate, GuideList, GuideCreate, UserDelete, UserList, UserCreate, Login
