@@ -15,7 +15,7 @@ from private_storage.storage.files import PrivateFileSystemStorage
 from simple_history.models import HistoricalRecords
 
 storage2 = PrivateFileSystemStorage(
-    location='/home/ubuntu/tesis/media/group-private/',
+    location=os.path.join(getattr(settings, 'PRIVATE_STORAGE_ROOT', os.path.join(settings.BASE_DIR, 'media')), 'group-private'),
     base_url='/group-private/'
 )
 

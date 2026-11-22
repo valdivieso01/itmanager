@@ -1,12 +1,27 @@
-tesis/settings.py
-tesis/settings.py.save
-db.sqlite3
+# Entornos locales y base de datos
+*.sqlite3
 sqlite.db
+.env
+settings_local.py
+
+# Almacenamiento y logs
+media/
+sent_emails/
+logs/
 letsencrypt/
+index.nginx-debian.html
+tesis/gunicorn
+
+# Python / IDE
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.idea/
+.vscode/
+
+# Migraciones locales autogeneradas si se desea recrear
 core/migrations/
 registration/migrations/
 messenger/migrations/
-logs/
-index.nginx-debian.html
-tesis/gunicorn
-media/
