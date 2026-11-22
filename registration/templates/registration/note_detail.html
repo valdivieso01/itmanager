@@ -5,39 +5,25 @@
 .scroll {overflow: auto; white-space: nowrap;}
 </style>
 <main role="main">
-    <div class="container">
+    <div class="container-fluid">
         <ol class="breadcrumb breadcrumb-right-arrow ">
           <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
           <li class="breadcrumb-item"><a href="{% url 'note_list' %}">Notes</a></li>
           <li class="breadcrumb-item active">{{note.name}}</li>
         </ol>
         <div class="row mt-3">
-            <div class="col-md-12 mx-auto text-center">
-                <h2 class="section-heading">
-                    {{note.name}}
-                </h2>
-            </div>
             <div class="col-md-12 mx-auto mt-2">
                 <div class="card mb-3">
-                <h5 class="card-header">Note</h5>
+		    <div class="card-header font-weight-bold align-middle">
+        	        {{note.name}}
+			<a href="{% url 'note_update' note.name|slugify %}" class="btn btn-secondary btn-sm float-right"><i class="fa fa-edit"></i></a>
+	            </div>
                     <div class="card-body">
 			<div class="scroll">
-				<p class="card-text">
-                        	{{note.note|safe}}
-                    		</p>
+			    <p class="card-text">
+                    	        {{note.note|safe}}
+                    	    </p>
 			</div>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                <h5 class="card-header">File</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {% if note.file.url != blanck %}
-                        <a href="{{note.file.url}}" download>{{note.file}}</a>
-                        {% else %}
-                        Empty
-                        {% endif %}
-                    </p>
                     </div>
                 </div>
             </div>

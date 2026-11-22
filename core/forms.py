@@ -77,7 +77,7 @@ class KeyForm(forms.ModelForm):
         ]
 
         labels = {
-            'name': 'Name',
+            'name': '',
             'username': '',
             'password': '',
             'note': '',
@@ -118,11 +118,13 @@ class GuideForm(forms.ModelForm):
         ]
 
         labels = {
-
+            'name': '',
+            'guide': '',
         }
 
         widgets = {
-
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}),
+            'guide': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Guide'}),
         }
 
     def __init__(self, *args, **kwargs):

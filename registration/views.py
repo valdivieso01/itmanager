@@ -127,12 +127,16 @@ class KeyList(ListView):
     model = Key
 
     def get_queryset(self):
-        return Key.objects.filter(profile__user=self.request.user)
+        if self.request.GET:
+            return  Key.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return  Key.objects.filter(profile__user=self.request.user)
 
 
 class KeyCreate(CreateView):
     model = Key
     form_class = KeyForm
+
 
     def form_valid(self, form):
         form.instance.profile = Profile.objects.get(user=self.request.user)
@@ -140,7 +144,7 @@ class KeyCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?created'
+        return reverse_lazy('key_list')
 
 
 class KeyUpdate(UpdateView):
@@ -163,7 +167,7 @@ class KeyUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?edited'
+        return reverse_lazy('key_list')
 
 
 class KeyDelete(DeleteView):
@@ -189,7 +193,7 @@ class KeyDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('key_list') + '?deleted'
+        return reverse_lazy('key_list')
 
 
 class NoteDetail(DetailView):
@@ -212,8 +216,10 @@ class NoteList(ListView):
     model = Note
 
     def get_queryset(self):
-        return Note.objects.filter(profile__user=self.request.user)
-
+        if self.request.GET:
+            return Note.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return Note.objects.filter(profile__user=self.request.user)
 
 class NoteCreate(CreateView):
     model = Note
@@ -225,7 +231,7 @@ class NoteCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?created'
+        return reverse_lazy('note_list')
 
 
 class NoteUpdate(UpdateView):
@@ -248,7 +254,7 @@ class NoteUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?edited'
+        return reverse_lazy('note_list')
 
 
 class NoteDelete(DeleteView):
@@ -274,7 +280,7 @@ class NoteDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('note_list') + '?deleted'
+        return reverse_lazy('note_list')
 
 
 class GuideDetail(DetailView):
@@ -297,7 +303,10 @@ class GuideList(ListView):
     model = Guide
 
     def get_queryset(self):
-        return Guide.objects.filter(profile__user=self.request.user)
+        if self.request.GET:
+            return  Guide.objects.filter(profile__user=self.request.user, name__icontains=self.request.GET['q'])
+        else:
+            return Guide.objects.filter(profile__user=self.request.user)
 
 
 class GuideCreate(CreateView):
@@ -310,7 +319,7 @@ class GuideCreate(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?created'
+        return reverse_lazy('guide_list')
 
 
 class GuideUpdate(UpdateView):
@@ -333,7 +342,7 @@ class GuideUpdate(UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?edited'
+        return reverse_lazy('guide_list')
 
 
 class GuideDelete(DeleteView):
@@ -359,5 +368,5 @@ class GuideDelete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('guide_list') + '?deleted'
+        return reverse_lazy('guide_list')
 

@@ -26,6 +26,7 @@
                 </h2>
 		<button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
+		<a href="{% url 'survey_update' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-primary mb-2"><i class="fas fa-edit"></i></a>
             </div>
             <div class="col-md-6 mx-auto">
                 <div class="card mb-3">

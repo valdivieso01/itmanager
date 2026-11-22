@@ -23,6 +23,7 @@
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fas fa-history"></i></button>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
                 <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
+		<a href="{% url 'key_update' key.set.group.name|slugify key.set.name|slugify key.name|slugify %}" class="btn btn-primary mb-2"><i class="fas fa-edit"></i></a>
             </div>
             <div class="col-md-6">
                 <div class="card mb-3">

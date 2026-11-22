@@ -2,9 +2,12 @@
 {% load static %}
 
 {% block content %}
-    <html>
-        <p>
-            {{ Guide }}
-        </p>
-    </html>
+    <ol class="breadcrumb breadcrumb-right-arrow">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guides</a></li>
+	<li class="breadcrumb-item active" >Create guide</li>
+    </ol>
+    <p>
+        {{ Guide }}
+    </p>
 {% endblock %}
