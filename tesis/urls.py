@@ -14,15 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from profiles.urls import profiles_patterns
 from django.conf import settings
 from messenger.urls import messenger_patterns
-from django.conf.urls import url
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/core/img/favicon.ico')),
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/core/img/favicon.ico')),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     #paths de apps
