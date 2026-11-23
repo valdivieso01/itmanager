@@ -576,6 +576,14 @@ class SurveyUserList(ListView):
     def get_queryset(self):
         return SurveyUser.objects.filter(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], survey__set__group__members=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_slug'] = self.kwargs['slug']
+        context['set_slug'] = self.kwargs['set']
+        context['survey_slug'] = self.kwargs['survey']
+        context['survey_obj'] = Survey.objects.filter(slug=self.kwargs['survey'], set__group__slug=self.kwargs['slug'], set__slug=self.kwargs['set']).first()
+        return context
+
 
 class SurveyUserCreate(CreateView):
     model = SurveyUser
@@ -592,7 +600,7 @@ class SurveyUserCreate(CreateView):
             for k in form.instance.set.survey_set.all():
                 if k.set == form.instance.survey.set:
                     for j in form.instance.survey.surveyuser_set.all():
-                        if j.name == form.instance.name:
+                        if j.full_name == form.instance.full_name:
                             raise forms.ValidationError("Survey User exist")
                     self.object = form.save()
                     return HttpResponseRedirect(self.get_success_url())
@@ -674,6 +682,14 @@ class SurveyWorkStationList(ListView):
         return SurveyWorkStation.objects.filter(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'],
                                          survey__set__slug=self.kwargs['set'],
                                          survey__set__group__members=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_slug'] = self.kwargs['slug']
+        context['set_slug'] = self.kwargs['set']
+        context['survey_slug'] = self.kwargs['survey']
+        context['survey_obj'] = Survey.objects.filter(slug=self.kwargs['survey'], set__group__slug=self.kwargs['slug'], set__slug=self.kwargs['set']).first()
+        return context
 
 
 class SurveyWorkStationCreate(CreateView):
@@ -771,6 +787,14 @@ class SurveyServerList(ListView):
     def get_queryset(self):
         return SurveyServer.objects.filter(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], survey__set__group__members=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_slug'] = self.kwargs['slug']
+        context['set_slug'] = self.kwargs['set']
+        context['survey_slug'] = self.kwargs['survey']
+        context['survey_obj'] = Survey.objects.filter(slug=self.kwargs['survey'], set__group__slug=self.kwargs['slug'], set__slug=self.kwargs['set']).first()
+        return context
+
 
 class SurveyServerCreate(CreateView):
     model = SurveyServer
@@ -867,6 +891,14 @@ class SurveyDeviceList(ListView):
     def get_queryset(self):
         return SurveyDevice.objects.filter(survey__slug=self.kwargs['survey'], survey__set__group__slug=self.kwargs['slug'], survey__set__slug=self.kwargs['set'], survey__set__group__members=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_slug'] = self.kwargs['slug']
+        context['set_slug'] = self.kwargs['set']
+        context['survey_slug'] = self.kwargs['survey']
+        context['survey_obj'] = Survey.objects.filter(slug=self.kwargs['survey'], set__group__slug=self.kwargs['slug'], set__slug=self.kwargs['set']).first()
+        return context
+
 
 class SurveyDeviceCreate(CreateView):
     model = SurveyDevice
@@ -960,9 +992,9 @@ class SurveyDeviceDelete(DeleteView):
 
 def search_qr_set(request, pk):
     try:
-        set = Set.objects.get(pk=pk)
-        group = Group.objects.get(slug=set.group.slug)
-        url = 'https://itmanager.site/set_detail/'+group.slug+'/'+set.slug
+        set_obj = Set.objects.get(pk=pk)
+        group = Group.objects.get(slug=set_obj.group.slug)
+        url = f'/set_detail/{group.slug}/{set_obj.slug}'
     except Set.DoesNotExist:
         raise Http404("Object does not exist")
     return HttpResponseRedirect(url)
@@ -970,40 +1002,40 @@ def search_qr_set(request, pk):
 def search_qr_key(request, pk):
     try:
         key = Key.objects.get(pk=pk)
-        set = Set.objects.get(group=key.set.group, slug=key.set.slug)
-        group = Group.objects.get(slug=set.group.slug)
-        url = 'https://itmanager.site/key_detail/'+group.slug+'/'+set.slug+'/'+key.slug
-    except Set.DoesNotExist:
+        set_obj = Set.objects.get(group=key.set.group, slug=key.set.slug)
+        group = Group.objects.get(slug=set_obj.group.slug)
+        url = f'/key_detail/{group.slug}/{set_obj.slug}/{key.slug}'
+    except (Set.DoesNotExist, Key.DoesNotExist):
         raise Http404("Object does not exist")
     return HttpResponseRedirect(url)
 
 def search_qr_backup(request, pk):
     try:
         backup = Backup.objects.get(pk=pk)
-        set = Set.objects.get(group=backup.set.group, slug=backup.set.slug)
-        group = Group.objects.get(slug=set.group.slug)
-        url = 'https://itmanager.site/backup_detail/'+group.slug+'/'+set.slug+'/'+backup.slug
-    except Set.DoesNotExist:
+        set_obj = Set.objects.get(group=backup.set.group, slug=backup.set.slug)
+        group = Group.objects.get(slug=set_obj.group.slug)
+        url = f'/backup_detail/{group.slug}/{set_obj.slug}/{backup.slug}'
+    except (Set.DoesNotExist, Backup.DoesNotExist):
         raise Http404("Object does not exist")
     return HttpResponseRedirect(url)
 
 def search_qr_guide(request, pk):
     try:
         guide = Guide.objects.get(pk=pk)
-        set = Set.objects.get(group=guide.set.group, slug=guide.set.slug)
-        group = Group.objects.get(slug=set.group.slug)
-        url = 'https://itmanager.site/guide_detail/'+group.slug+'/'+set.slug+'/'+guide.slug
-    except Set.DoesNotExist:
+        set_obj = Set.objects.get(group=guide.set.group, slug=guide.set.slug)
+        group = Group.objects.get(slug=set_obj.group.slug)
+        url = f'/guide_detail/{group.slug}/{set_obj.slug}/{guide.slug}'
+    except (Set.DoesNotExist, Guide.DoesNotExist):
         raise Http404("Object does not exist")
     return HttpResponseRedirect(url)
 
 def search_qr_survey(request, pk):
     try:
         survey = Survey.objects.get(pk=pk)
-        set = Set.objects.get(group=survey.set.group, slug=survey.set.slug)
-        group = Group.objects.get(slug=set.group.slug)
-        url = 'https://itmanager.site/survey_detail/'+group.slug+'/'+set.slug+'/'+survey.slug
-    except Set.DoesNotExist:
+        set_obj = Set.objects.get(group=survey.set.group, slug=survey.set.slug)
+        group = Group.objects.get(slug=set_obj.group.slug)
+        url = f'/survey_detail/{group.slug}/{set_obj.slug}/{survey.slug}'
+    except (Set.DoesNotExist, Survey.DoesNotExist):
         raise Http404("Object does not exist")
     return HttpResponseRedirect(url)
 

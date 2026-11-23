@@ -1,56 +1,95 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}Usuarios Relevados | IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveyuser_list.first.survey.set.group.name|slugify %}">Sets</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveyuser_list.first.survey.set.group.name|slugify surveyuser_list.first.survey.set.name|slugify %}">{{surveyuser_list.first.survey.set.name}}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveyuser_list.first.survey.set.group.name|slugify surveyuser_list.first.survey.set.name|slugify surveyuser_list.first.survey.name|slugify %}">{{surveyuser_list.first.survey.name}}</a></li>
-            <li class="breadcrumb-item active">Survey Users</li>
-        </ol>
-        {% for user in surveyuser_list %}
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto">
-                <div class="card mb-3">
-                <h5 class="card-header">{{user.full_name}}</h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Department: {{user.department}}
-                        </p>
-                        <p class="card-text">
-                            Job Title: {{user.job_title}}
-                        </p>
-                        <p class="card-text">
-                            Phone Number: {{user.phone_number}}
-                        </p>
-                        <p class="card-text">
-                            Intern Number: {{user.intern_number}}
-                        </p>
-                        <p class="card-text">
-                            Country: {{user.country}}
-                        </p>
-                        <p class="card-text">
-                            City: {{user.city}}
-                        </p>
-                        <p class="card-text">
-                            Address: {{user.adress}}
-                        </p>
-                        <p class="card-text">
-                            Email: {{user.email}}
-                        </p>
-                        <p class="card-text">
-                            Observations: {{user.observations}}
-                        </p>
-                    </div>
-                    <a href="{% url 'surveyuser_update' user.survey.set.group.name|slugify user.survey.set.name|slugify user.survey.name|slugify user.full_name|slugify %}" class="btn btn-secondary">Edit</a>
-                    <a href="{% url 'surveyuser_delete' user.survey.set.group.name|slugify user.survey.set.name|slugify user.survey.name|slugify user.full_name|slugify %}" class="btn btn-danger">Delete</a>
-                </div>
+    <div class="container-fluid px-lg-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <ol class="breadcrumb shadow-sm mb-2 mb-md-0 flex-grow-1 mr-md-3">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_detail' group_slug %}">{{survey_obj.set.group.name|default:group_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'set_detail' group_slug set_slug %}">{{survey_obj.set.name|default:set_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'survey_detail' group_slug set_slug survey_slug %}">{{survey_obj.name|default:survey_slug}}</a></li>
+                <li class="breadcrumb-item active">Usuarios</li>
+            </ol>
+            <div class="d-flex">
+                {% if surveyuser_list %}
+                <button type="button" onclick="exportUsersCSV()" class="btn btn-outline-success shadow-sm mr-2">
+                    <i class="fas fa-file-csv mr-1"></i> Exportar CSV
+                </button>
+                {% endif %}
+                <a href="{% url 'surveyuser_create' group_slug set_slug survey_slug %}" class="btn btn-primary shadow-sm">
+                    <i class="fas fa-plus mr-1"></i> Agregar Usuario
+                </a>
             </div>
         </div>
-        {% endfor %}
+
+        <div class="row">
+            {% for user in surveyuser_list %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span class="font-weight-bold text-dark"><i class="fas fa-user text-primary mr-2"></i>{{user.full_name}}</span>
+                        <div>
+                            <a href="{% url 'surveyuser_update' group_slug set_slug survey_slug user.full_name|slugify %}" class="btn btn-sm btn-outline-secondary mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'surveyuser_delete' group_slug set_slug survey_slug user.full_name|slugify %}" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body small">
+                        <div class="row">
+                            <div class="col-6 mb-1"><strong>Departamento:</strong> {{user.department|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Cargo:</strong> {{user.job_title|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Teléfono:</strong> {{user.phone_number|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Interno:</strong> {{user.intern_number|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Email:</strong> {{user.email|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Ubicación:</strong> {{user.city|default:""}} {{user.country|default:""}}</div>
+                            <div class="col-12 mb-1"><strong>Dirección:</strong> {{user.adress|default:"—"}}</div>
+                            <div class="col-12 mt-1"><strong>Observaciones:</strong> {{user.observations|default:"—"}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card p-5 text-center text-muted">
+                    <i class="fas fa-users fa-3x mb-3 text-secondary"></i>
+                    <h6 class="font-weight-bold">No hay usuarios relevados todavía</h6>
+                    <p class="small mb-3">Registra el personal del sector para asociarlo al relevamiento técnico.</p>
+                    <div>
+                        <a href="{% url 'surveyuser_create' group_slug set_slug survey_slug %}" class="btn btn-primary btn-sm px-3">
+                            <i class="fas fa-plus mr-1"></i> Agregar Primer Usuario
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a id="floating-button" href="{% url 'surveyuser_create' group_slug set_slug survey_slug %}" data-toggle="tooltip" data-placement="left" title="Agregar Usuario" style="text-decoration: none;">
+            <span class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></span>
+        </a>
     </div>
+    <script>
+    function exportUsersCSV() {
+        var rows = [["Nombre Completo", "Departamento", "Cargo", "Telefono", "Interno", "Email", "Ciudad", "Pais", "Direccion", "Observaciones"]];
+        {% for u in surveyuser_list %}
+        rows.push([
+            "{{u.full_name|escapejs}}", "{{u.department|escapejs}}", "{{u.job_title|escapejs}}",
+            "{{u.phone_number|escapejs}}", "{{u.intern_number|escapejs}}", "{{u.email|escapejs}}",
+            "{{u.city|escapejs}}", "{{u.country|escapejs}}", "{{u.adress|escapejs}}", "{{u.observations|escapejs}}"
+        ]);
+        {% endfor %}
+        var csvContent = "\uFEFF" + rows.map(function(e){ return e.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "relevamiento_usuarios_{{survey_slug}}.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    </script>
 </main>
 {% endblock %}

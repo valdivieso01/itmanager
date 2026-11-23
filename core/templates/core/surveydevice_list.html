@@ -1,47 +1,91 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}Dispositivos Relevados | IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveydevice_list.first.survey.set.group.name|slugify %}">Sets</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveydevice_list.first.survey.set.group.name|slugify surveydevice_list.first.survey.set.name|slugify %}">{{surveydevice_list.first.survey.set.name}}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveydevice_list.first.survey.set.group.name|slugify surveydevice_list.first.survey.set.name|slugify surveydevice_list.first.survey.name|slugify %}">{{surveydevice_list.first.survey.name}}</a></li>
-            <li class="breadcrumb-item active">Survey Devices</li>
-        </ol>
-        {% for device in surveydevice_list %}
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto">
-                <div class="card mb-3">
-                <h5 class="card-header">{{device.name}}</h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                            Ip: {{device.ip}}
-                        </p>
-                        <p class="card-text">
-                            Connection: {{device.connection}}
-                        </p>
-                        <p class="card-text">
-                            Username: {{device.username}}
-                        </p>
-                        <p class="card-text">
-                            Password: {{device.password}}
-                        </p>
-                        <p class="card-text">
-                            type: {{device.type}}
-                        </p>
-                        <p class="card-text">
-                            Observations: {{device.observations}}
-                        </p>
-                    </div>
-                    <a href="{% url 'surveydevice_update' device.survey.set.group.name|slugify device.survey.set.name|slugify device.survey.name|slugify device.name|slugify %}" class="btn btn-secondary">Edit</a>
-                    <a href="{% url 'surveydevice_delete' device.survey.set.group.name|slugify device.survey.set.name|slugify device.survey.name|slugify device.name|slugify %}" class="btn btn-danger">Delete</a>
-                </div>
+    <div class="container-fluid px-lg-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <ol class="breadcrumb shadow-sm mb-2 mb-md-0 flex-grow-1 mr-md-3">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_detail' group_slug %}">{{survey_obj.set.group.name|default:group_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'set_detail' group_slug set_slug %}">{{survey_obj.set.name|default:set_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'survey_detail' group_slug set_slug survey_slug %}">{{survey_obj.name|default:survey_slug}}</a></li>
+                <li class="breadcrumb-item active">Dispositivos de Red</li>
+            </ol>
+            <div class="d-flex">
+                {% if surveydevice_list %}
+                <button type="button" onclick="exportDevicesCSV()" class="btn btn-outline-success shadow-sm mr-2">
+                    <i class="fas fa-file-csv mr-1"></i> Exportar CSV
+                </button>
+                {% endif %}
+                <a href="{% url 'surveydevice_create' group_slug set_slug survey_slug %}" class="btn btn-primary shadow-sm">
+                    <i class="fas fa-plus mr-1"></i> Agregar Dispositivo
+                </a>
             </div>
         </div>
-        {% endfor %}
+
+        <div class="row">
+            {% for device in surveydevice_list %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span class="font-weight-bold text-dark"><i class="fas fa-network-wired text-warning mr-2"></i>{{device.name}}</span>
+                        <div>
+                            <a href="{% url 'surveydevice_update' group_slug set_slug survey_slug device.name|slugify %}" class="btn btn-sm btn-outline-secondary mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'surveydevice_delete' group_slug set_slug survey_slug device.name|slugify %}" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body small">
+                        <div class="row">
+                            <div class="col-6 mb-1"><strong>Dirección IP:</strong> <code>{{device.ip|default:"—"}}</code></div>
+                            <div class="col-6 mb-1"><strong>Tipo:</strong> {{device.type|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Conexión:</strong> {{device.connection|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Usuario:</strong> <code>{{device.username|default:"—"}}</code></div>
+                            <div class="col-12 mt-1"><strong>Observaciones:</strong> {{device.observations|default:"—"}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card p-5 text-center text-muted">
+                    <i class="fas fa-network-wired fa-3x mb-3 text-secondary"></i>
+                    <h6 class="font-weight-bold">No hay dispositivos de red relevados todavía</h6>
+                    <p class="small mb-3">Registra routers, switches, firewalls, impresoras o APs del relevamiento.</p>
+                    <div>
+                        <a href="{% url 'surveydevice_create' group_slug set_slug survey_slug %}" class="btn btn-primary btn-sm px-3">
+                            <i class="fas fa-plus mr-1"></i> Agregar Primer Dispositivo
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a id="floating-button" href="{% url 'surveydevice_create' group_slug set_slug survey_slug %}" data-toggle="tooltip" data-placement="left" title="Agregar Dispositivo" style="text-decoration: none;">
+            <span class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></span>
+        </a>
     </div>
+    <script>
+    function exportDevicesCSV() {
+        var rows = [["Dispositivo", "Tipo", "IP", "Conexion", "Usuario", "Observaciones"]];
+        {% for d in surveydevice_list %}
+        rows.push([
+            "{{d.name|escapejs}}", "{{d.type|escapejs}}", "{{d.ip|escapejs}}",
+            "{{d.connection|escapejs}}", "{{d.username|escapejs}}", "{{d.observations|escapejs}}"
+        ]);
+        {% endfor %}
+        var csvContent = "\uFEFF" + rows.map(function(e){ return e.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "relevamiento_dispositivos_{{survey_slug}}.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    </script>
 </main>
 {% endblock %}

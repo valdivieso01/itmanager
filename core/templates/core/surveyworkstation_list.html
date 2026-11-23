@@ -1,68 +1,99 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}Puestos de Trabajo (Workstations) | IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_detail' surveyworkstation_list.first.survey.set.group.name|slugify %}">Sets</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'set_detail' surveyworkstation_list.first.survey.set.group.name|slugify surveyworkstation_list.first.survey.set.name|slugify %}">{{surveyworkstation_list.first.survey.set.name}}</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'survey_detail' surveyworkstation_list.first.survey.set.group.name|slugify surveyworkstation_list.first.survey.set.name|slugify surveyworkstation_list.first.survey.name|slugify %}">{{surveyworkstation_list.first.survey.name}}</a></li>
-            <li class="breadcrumb-item active">Survey WorkStations</li>
-        </ol>
-        {% for workstation in surveyworkstation_list %}
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto">
-                <div class="card mb-3">
-                <h5 class="card-header">{{workstation.name}}</h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                            User: {{workstation.user}}
-                        </p>
-                        <p class="card-text">
-                            Charge: {{workstation.charge}}
-                        </p>
-                        <p class="card-text">
-                            Telephone: {{workstation.telephone}}
-                        </p>
-                        <p class="card-text">
-                            Email: {{workstation.email}}
-                        </p>
-                        <p class="card-text">
-                            User location: {{workstation.user_location}}
-                        </p>
-                        <p class="card-text">
-                            Files location: {{workstation.files_location}}
-                        </p>
-                        <p class="card-text">
-                            Windows username: {{workstation.windows_username}}
-                        </p>
-                        <p class="card-text">
-                            Windows password: {{workstation.windows_password}}
-                        </p>
-                        <p class="card-text">
-                            Windows version: {{workstation.windows_version}}
-                        </p>
-                        <p class="card-text">
-                            Software additional: {{workstation.software_additional}}
-                        </p>
-                        <p class="card-text">
-                            Software additional: {{workstation.email_type}}
-                        </p>
-                        <p class="card-text">
-                            Server connections: {{workstation.server_connections}}
-                        </p>
-                        <p class="card-text">
-                            Observations: {{workstation.observations}}
-                        </p>
-                    </div>
-                    <a href="{% url 'surveyworkstation_update' workstation.survey.set.group.name|slugify workstation.survey.set.name|slugify workstation.survey.name|slugify workstation.name|slugify %}" class="btn btn-secondary">Edit</a>
-                    <a href="{% url 'surveyworkstation_delete' workstation.survey.set.group.name|slugify workstation.survey.set.name|slugify workstation.survey.name|slugify workstation.name|slugify %}" class="btn btn-danger">Delete</a>
-                </div>
+    <div class="container-fluid px-lg-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <ol class="breadcrumb shadow-sm mb-2 mb-md-0 flex-grow-1 mr-md-3">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'group_detail' group_slug %}">{{survey_obj.set.group.name|default:group_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'set_detail' group_slug set_slug %}">{{survey_obj.set.name|default:set_slug}}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'survey_detail' group_slug set_slug survey_slug %}">{{survey_obj.name|default:survey_slug}}</a></li>
+                <li class="breadcrumb-item active">Puestos (Workstations)</li>
+            </ol>
+            <div class="d-flex">
+                {% if surveyworkstation_list %}
+                <button type="button" onclick="exportWorkstationsCSV()" class="btn btn-outline-success shadow-sm mr-2">
+                    <i class="fas fa-file-csv mr-1"></i> Exportar CSV
+                </button>
+                {% endif %}
+                <a href="{% url 'surveyworkstation_create' group_slug set_slug survey_slug %}" class="btn btn-primary shadow-sm">
+                    <i class="fas fa-plus mr-1"></i> Agregar Puesto
+                </a>
             </div>
         </div>
-        {% endfor %}
+
+        <div class="row">
+            {% for workstation in surveyworkstation_list %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span class="font-weight-bold text-dark"><i class="fas fa-desktop text-info mr-2"></i>{{workstation.name}}</span>
+                        <div>
+                            <a href="{% url 'surveyworkstation_update' group_slug set_slug survey_slug workstation.name|slugify %}" class="btn btn-sm btn-outline-secondary mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'surveyworkstation_delete' group_slug set_slug survey_slug workstation.name|slugify %}" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body small">
+                        <div class="row">
+                            <div class="col-6 mb-1"><strong>Usuario:</strong> {{workstation.user|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Cargo:</strong> {{workstation.charge|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Teléfono:</strong> {{workstation.telephone|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Email:</strong> {{workstation.email|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Ubicación:</strong> {{workstation.user_location|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Ubic. Archivos:</strong> {{workstation.files_location|default:"—"}}</div>
+                            <div class="col-6 mb-1"><strong>Usuario Win:</strong> <code>{{workstation.windows_username|default:"—"}}</code></div>
+                            <div class="col-6 mb-1"><strong>Versión SO:</strong> {{workstation.windows_version|default:"—"}}</div>
+                            <div class="col-12 mb-1"><strong>Software Adicional:</strong> {{workstation.software_additional|default:"—"}}</div>
+                            <div class="col-12 mb-1"><strong>Conexiones Servidor:</strong> {{workstation.server_connections|default:"—"}}</div>
+                            <div class="col-12 mt-1"><strong>Observaciones:</strong> {{workstation.observations|default:"—"}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="card p-5 text-center text-muted">
+                    <i class="fas fa-desktop fa-3x mb-3 text-secondary"></i>
+                    <h6 class="font-weight-bold">No hay puestos de trabajo relevados todavía</h6>
+                    <p class="small mb-3">Registra las estaciones de trabajo (PCs / Notebooks) del relevamiento.</p>
+                    <div>
+                        <a href="{% url 'surveyworkstation_create' group_slug set_slug survey_slug %}" class="btn btn-primary btn-sm px-3">
+                            <i class="fas fa-plus mr-1"></i> Agregar Primer Puesto
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a id="floating-button" href="{% url 'surveyworkstation_create' group_slug set_slug survey_slug %}" data-toggle="tooltip" data-placement="left" title="Agregar Puesto" style="text-decoration: none;">
+            <span class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></span>
+        </a>
     </div>
+    <script>
+    function exportWorkstationsCSV() {
+        var rows = [["Equipo", "Usuario", "Cargo", "Telefono", "Email", "Ubicacion", "Usuario Windows", "SO", "Software Adicional", "Conexiones Servidor", "Observaciones"]];
+        {% for w in surveyworkstation_list %}
+        rows.push([
+            "{{w.name|escapejs}}", "{{w.user|escapejs}}", "{{w.charge|escapejs}}",
+            "{{w.telephone|escapejs}}", "{{w.email|escapejs}}", "{{w.user_location|escapejs}}",
+            "{{w.windows_username|escapejs}}", "{{w.windows_version|escapejs}}",
+            "{{w.software_additional|escapejs}}", "{{w.server_connections|escapejs}}", "{{w.observations|escapejs}}"
+        ]);
+        {% endfor %}
+        var csvContent = "\uFEFF" + rows.map(function(e){ return e.map(function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; }).join(","); }).join("\n");
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "relevamiento_puestos_{{survey_slug}}.csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    </script>
 </main>
 {% endblock %}

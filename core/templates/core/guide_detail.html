@@ -2,81 +2,102 @@
 {% load static %}
 {% load qr_code %}
 {% load core_tags %}
+{% block title %}{{guide.name}} | Guía Técnica{% endblock %}
+
 {% block content %}
-<style>
-.scroll {overflow: auto; white-space: nowrap;}
-</style>
 <main role="main">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_detail' guide.set.group.name|slugify %}">Sets</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'set_detail' guide.set.group.name|slugify guide.set.name|slugify %}">{{object.set}}</a></li>
+    <div class="container-fluid px-lg-4">
+        <ol class="breadcrumb shadow-sm mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_detail' guide.set.group.name|slugify %}">{{guide.set.group.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'set_detail' guide.set.group.name|slugify guide.set.name|slugify %}">{{guide.set.name}}</a></li>
             <li class="breadcrumb-item active">{{guide.name}}</li>
         </ol>
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto text-center">
-                <h2 class="section-heading mb-2">
-                    {{guide.name}}
-                </h2>
-                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
-                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
-		<a href="{% url 'guide_update' guide.set.group.name|slugify guide.set.name|slugify guide.name|slugify %}" class="btn btn-primary mb-2"><i class="fas fa-edit"></i></a>
-            </div>
-            <div class="col-md-12 mx-auto">
-		<div class="card mb-3">
-                <h5 class="card-header">Guide</h5>
-                    <div class="card-body">
-			<div class="scroll">
-                    <p class="card-text">
-                        {{guide.guide|safe}}
-                    </p>
+
+        <div class="card border-0 shadow-sm mb-4 p-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #f0fdf4; color: #16a34a; font-size: 20px;">
+                        <i class="fas fa-book-reader"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-weight-bold text-dark mb-0">{{guide.name}}</h3>
+                        <small class="text-muted">Guía Técnica — {{guide.set.name}} ({{guide.set.group.name}})</small>
                     </div>
-			</div>
                 </div>
-                <div class="card mb-3">
-                <h5 class="card-header">Files</h5>
-                    <div class="card-body">
-                        <p class="card-text">
-                        {% if guide.file.url != blanck %}
-                        <a href="{{guide.file.url}}" download>{{guide.file | getfilename}}</a>
-                        {% else %}
-                        Empty
-                        {% endif %}
-                        </p>
-                    </div>
+                <div>
+                    <button type="button" class="btn btn-outline-dark btn-sm mr-1" data-toggle="modal" data-target=".bs-example-modal-sm" title="Código QR">
+                        <i class="fas fa-qrcode mr-1"></i> QR
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm mr-1" data-toggle="modal" data-target=".bs-example-modal-xs" title="Auditoría">
+                        <i class="fas fa-info-circle mr-1"></i> Info
+                    </button>
+                    <a href="{% url 'guide_update' guide.set.group.name|slugify guide.set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit mr-1"></i> Editar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header py-2">
+                <span><i class="fas fa-file-alt text-muted mr-2"></i><strong>Contenido del Procedimiento / Guía</strong></span>
+            </div>
+            <div class="card-body p-4" style="overflow-x: auto; line-height: 1.7;">
+                {{guide.guide|safe|default:"Sin contenido redactado."}}
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header py-2">
+                <span><i class="fas fa-paperclip text-muted mr-2"></i><strong>Archivo Adjunto</strong></span>
+            </div>
+            <div class="card-body">
+                {% if guide.file %}
+                    <a href="{{guide.file.url}}" download class="btn btn-sm btn-outline-dark">
+                        <i class="fas fa-download mr-1"></i> {{guide.file | getfilename}}
+                    </a>
+                {% else %}
+                    <span class="text-muted small">Sin archivo adjunto</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="info">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold" id="info"><i class="fas fa-info-circle mr-2 text-primary"></i>Auditoría</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2"><strong>Creado por:</strong> {{guide.created_by}} el {{guide.created_at}}</p>
+                    <p class="mb-0"><strong>Última edición:</strong> {{guide.last_modified_by}} el {{guide.last_modified_at}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-        <div class="modal-dialog modal-xs" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="info">Info</h5>
-                </div>
-                <div class="modal-content text-center">
-                     Created by {{guide.created_by}} on {{guide.created_at}}<br>
-                     Last edition by {{guide.last_modified_by}} on {{guide.last_modified_at}}   
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="qr-code">
         <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qr-code">QR code</h5>
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold" id="qr-code"><i class="fas fa-qrcode mr-2 text-primary"></i>Código QR</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div id="areaImprimir" class="modal-body mx-auto">
+                <div id="areaImprimir" class="modal-body text-center py-4">
+                    <div class="font-weight-bold mb-2">{{guide.name}}</div>
                     {% guide_url request.META.HTTP_HOST guide.id as guide_qr %}
                     {% qr_from_text guide_qr size="M" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="printDiv('areaImprimir')"><i class="fas fa-print mr-1"></i>Imprimir</button>
                 </div>
             </div>
         </div>

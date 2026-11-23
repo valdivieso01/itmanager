@@ -1,43 +1,45 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}{{guide.name}} | Guía Técnica{% endblock %}
+
 {% block content %}
-<style>
-.scroll {overflow-x: scroll;white-space: nowrap;display: block;}
-</style>
 <main role="main">
-    <div class="container-fluid">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guides</a></li>
+    <div class="container-fluid px-lg-4">
+        <ol class="breadcrumb shadow-sm mb-4">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guías Técnicas</a></li>
           <li class="breadcrumb-item active">{{guide.name}}</li>
         </ol>
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto mt-2">
-                <div class="card mb-3">
-                    <h5 class="card-header">
-			{{guide.name}}
-		        <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary float-right"><i class="fa fa-edit"></i></a>
-		    </h5>
-                <div class="card-body">
-		    <div class="scroll">
-		        <p class="card-text">
-                            {{guide.guide|safe}}
-                    	</p>
-		    </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                <div class="d-flex align-items-center">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 38px; height: 38px; background-color: #f0fdf4; color: #16a34a;">
+                        <i class="fas fa-book-reader"></i>
+                    </span>
+                    <h5 class="mb-0 font-weight-bold text-dark">{{guide.name}}</h5>
                 </div>
-		</div>
-                <div class="card mb-3">
-                <h5 class="card-header">File</h5>
-                    <div class="card-body">
-                    <p class="card-text">
-                        {% if guide.file.url != blanck %}
-                        <a href="{{guide.file.url}}" download>{{guide.file}}</a>
-                        {% else %}
-                        Empty
-                        {% endif %}
-                    </p>
-                    </div>
-                </div>
+                <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit mr-1"></i> Editar
+                </a>
+            </div>
+            <div class="card-body p-4" style="overflow-x: auto; line-height: 1.7;">
+                {{guide.guide|safe|default:"Sin contenido redactado."}}
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header py-2">
+                <span><i class="fas fa-paperclip text-muted mr-2"></i><strong>Archivo Adjunto</strong></span>
+            </div>
+            <div class="card-body">
+                {% if guide.file %}
+                    <a href="{{guide.file.url}}" download class="btn btn-sm btn-outline-dark">
+                        <i class="fas fa-download mr-1"></i> {{guide.file}}
+                    </a>
+                {% else %}
+                    <span class="text-muted small">Sin archivo adjunto</span>
+                {% endif %}
             </div>
         </div>
     </div>
