@@ -6,6 +6,15 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/
 
 ---
 
+## [2.1.1] - 2026-11-23
+
+### ⚡ Corrección de Build en Vercel Moderno (Vercel CLI 66+)
+- **Migración a Zero-Config Moderno:** Se eliminó la directiva obsoleta `builds` en `vercel.json` y se adoptó el estándar moderno de `rewrites` hacia `/api/index`.
+- **Eliminación del conflicto PEP 668:** Se retiró `build_files.sh`, permitiendo que el motor de construcción nativo de Vercel (`uv`) instale automáticamente `requirements.txt` en un entorno aislado sin errores de `externally-managed-environment`.
+- **Resiliencia en Estáticos:** Se configuró WhiteNoise con `CompressedStaticFilesStorage` y `WHITENOISE_USE_FINDERS = True`, eliminando cualquier dependencia de manifiestos previos de `collectstatic`.
+
+---
+
 ## [2.1.0] - 2026-11-23
 
 ### ⚡ Soporte Plug-and-Play para Vercel
