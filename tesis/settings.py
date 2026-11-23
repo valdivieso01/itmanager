@@ -2,16 +2,17 @@
 Django settings for tesis project.
 
 Generated for IT Manager - Sistema de Gestión de Documentación y Activos TI.
-Configured for reproducible development and containerized production.
+Configured for reproducible development, containerized production, and turnkey Vercel deployment.
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
+# Detectar entorno de ejecución en Vercel
+IS_VERCEL = os.environ.get('VERCEL') == '1'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
@@ -26,12 +27,20 @@ FIELD_ENCRYPTION_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
+DEBUG = os.environ.get('DEBUG', 'True' if not IS_VERCEL else 'False').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,*').split(',')
+    for host in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app,.now.sh,*').split(',')
     if host.strip()
+]
+
+# Dominios autorizados para envío de formularios (evita 403 Forbidden de CSRF en Vercel)
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.vercel.app',
+    'https://*.now.sh',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 
@@ -63,6 +72,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,18 +104,20 @@ WSGI_APPLICATION = 'tesis.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# Fallback elástico: si no hay DATABASE_URL configurada, en Vercel usa /tmp/db.sqlite3
+default_sqlite_path = '/tmp/db.sqlite3' if IS_VERCEL else os.path.join(BASE_DIR, 'db.sqlite3')
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('DB_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', f"sqlite:///{default_sqlite_path}"),
+        conn_max_age=600,
+    )
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -124,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'es-ar'
 
@@ -138,16 +150,21 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# WhiteNoise: compresión, caché y fallback a finders para desarrollo y Vercel
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+WHITENOISE_USE_FINDERS = True
+
+# Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/tmp/media' if IS_VERCEL else os.path.join(BASE_DIR, 'media')
 
 # Configuración de almacenamiento privado autenticado (django-private-storage)
-PRIVATE_STORAGE_ROOT = os.environ.get('PRIVATE_STORAGE_ROOT', os.path.join(BASE_DIR, 'media'))
+PRIVATE_STORAGE_ROOT = os.environ.get('PRIVATE_STORAGE_ROOT', MEDIA_ROOT)
 PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_authenticated'
 
 # Crispy Forms
@@ -172,6 +189,6 @@ CKEDITOR_CONFIGS = {
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Emails en desarrollo (escritos en sent_emails)
+# Emails en desarrollo (escritos en sent_emails o /tmp en Vercel)
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_FILE_PATH = '/tmp/sent_emails' if IS_VERCEL else os.path.join(BASE_DIR, 'sent_emails')
