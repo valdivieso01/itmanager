@@ -1,114 +1,191 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load core_tags %}
+{% block title %}{{key.name}} | Bóveda IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-<script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"></script>
-    <div class="container-fluid">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'key_list' %}">Keys</a></li>
+    <div class="container-fluid px-lg-4">
+        <ol class="breadcrumb shadow-sm mb-4">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'key_list' %}">Bóveda de Llaves</a></li>
           <li class="breadcrumb-item active">{{key.name}}</li>
         </ol>
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto text-center">
-                <h2 class="section-heading mb-2">
-                    {{key.name}}
-                </h2>
-		<a class="btn btn-primary mb-2" href="mailto:email@example.com?subject={{key.name}}&body=Username:{{key.username}}%0APassword:{{key.password}}%0ANote:{{key.note}}%0AURL:{{key.url}}"><i class="fas fa-envelope-square"></i></a>
-                <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-md"><i class="fas fa-history"></i></button>
-		<a href="{% url 'key_update' key.name|slugify %}" class="btn btn-primary mb-2"><i class="fas fa-edit"></i></a>
+
+        <div class="card border-0 shadow-sm mb-4 p-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #fffbeb; color: #d97706; font-size: 20px;">
+                        <i class="fas fa-key"></i>
+                    </span>
+                    <div>
+                        <h3 class="font-weight-bold text-dark mb-0">{{key.name}}</h3>
+                        <small class="text-muted">Credencial de acceso cifrada</small>
+                    </div>
+                </div>
+                <div>
+                    <a class="btn btn-outline-secondary btn-sm mr-1" title="Enviar por Correo" href="mailto:?subject=Credencial: {{key.name}}&body=Username: {{key.username}}%0AURL: {{key.url}}%0ANote: {{key.note}}">
+                        <i class="fas fa-envelope mr-1"></i> Compartir
+                    </a>
+                    <button type="button" class="btn btn-outline-info btn-sm mr-1" data-toggle="modal" data-target=".bs-example-modal-md" title="Historial de cambios">
+                        <i class="fas fa-history mr-1"></i> Historial
+                    </button>
+                    <a href="{% url 'key_update' key.name|slugify %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit mr-1"></i> Editar
+                    </a>
+                </div>
             </div>
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header">
-		        <strong>Username</strong>
-                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p1')"><i class="fas fa-clipboard"></i></button>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fas fa-user text-muted mr-2"></i><strong>Usuario / Username</strong></span>
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="btn-copy-user" onclick="copyField('#p1', '#btn-copy-user')">
+                            <i class="fas fa-copy mr-1"></i> <span>Copiar</span>
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <div id="p1">{{key.username}}</div>
-		    </div>
-		</div>
-	    </div>
-            <div class="col-md-6">  
-                <div class="card mb-3">
-                    <div class="card-header">
-			<strong>Password</strong>
-                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p2')"><i class="fas fa-clipboard"></i></button>
-    		    </div>
-                    <div class="card-body">
-                        <div id="p2">{{key.password}}</div>
+                    <div class="card-body d-flex align-items-center">
+                        <code id="p1" class="text-dark" style="font-size: 1rem;">{{key.username}}</code>
                     </div>
                 </div>
-	    </div>
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header">
-			<strong>URL</strong>
-                        <button type="button" class="btn btn-primary btn-sm" style="float: right;" onclick="copyToClipboard('#p3')"><i class="fas fa-clipboard"></i></button>
-		    </div>
-                    <div class="card-body">
-                        <div id="p3">{{key.url}}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fas fa-lock text-muted mr-2"></i><strong>Contraseña / Password</strong></span>
+                        <div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm mr-1" id="toggle-pass-btn" onclick="togglePasswordView()" title="Mostrar / Ocultar">
+                                <i class="fas fa-eye" id="toggle-pass-icon"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="btn-copy-pass" onclick="copyField('#p2', '#btn-copy-pass')">
+                                <i class="fas fa-copy mr-1"></i> <span>Copiar</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                        <input id="id_password_display" type="password" readonly value="{{key.password}}" class="form-control-plaintext font-weight-bold text-dark p-0" style="font-family: monospace; font-size: 1.05rem;">
+                        <div id="p2" class="d-none">{{key.password}}</div>
                     </div>
                 </div>
-	    </div>
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header">
-			<strong>File</strong>
-		    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                        {% if key.file.url != blanck %}
-                            <a href="{{key.file.url}}" download>{{key.file | getfilename}}</a>
-                        {% else %}
-                            Empty
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2">
+                        <span><i class="fas fa-globe text-muted mr-2"></i><strong>URL / Host</strong></span>
+                        {% if key.url %}
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="btn-copy-url" onclick="copyField('#p3', '#btn-copy-url')">
+                            <i class="fas fa-copy mr-1"></i> <span>Copiar</span>
+                        </button>
                         {% endif %}
-                        </p>
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                        {% if key.url %}
+                            <a href="{{key.url}}" target="_blank" rel="noopener" id="p3" class="text-primary font-weight-500">{{key.url}} <i class="fas fa-external-link-alt small ml-1"></i></a>
+                        {% else %}
+                            <span class="text-muted small">Sin URL especificada</span>
+                        {% endif %}
                     </div>
                 </div>
-	    </div>
-            <div class="col-md-12">
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <strong>Note</strong>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header py-2">
+                        <span><i class="fas fa-paperclip text-muted mr-2"></i><strong>Archivo Adjunto</strong></span>
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                        {% if key.file %}
+                            <a href="{{key.file.url}}" download class="btn btn-sm btn-outline-dark">
+                                <i class="fas fa-download mr-1"></i> {{key.file | getfilename}}
+                            </a>
+                        {% else %}
+                            <span class="text-muted small">Sin archivo adjunto</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header py-2">
+                        <span><i class="fas fa-sticky-note text-muted mr-2"></i><strong>Notas Adicionales</strong></span>
                     </div>
                     <div class="card-body">
-                        {{key.note}}
+                        {% if key.note %}
+                            <p class="mb-0 text-dark" style="white-space: pre-wrap;">{{key.note}}</p>
+                        {% else %}
+                            <span class="text-muted small">Sin notas adicionales</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade bs-example-modal-md"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="history-keys">
         <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="history-keys">History Keys</h5>
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold" id="history-keys"><i class="fas fa-history mr-2 text-primary"></i>Historial de Credencial</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body mx-auto">
+                <div class="modal-body">
                     {% for k in key.history.all %}
-                    <p>
-                        Date: {{k.history_date}}<br>
-                        Username: {{k.username}}<br>
-                        Password: {{k.password}}<br>
-                        File:  <a href="{{k.file.url}}">{{k.file}}</a>
-                    </p>
+                    <div class="border-bottom pb-2 mb-2 small">
+                        <div class="text-muted mb-1"><i class="far fa-clock mr-1"></i> {{k.history_date}}</div>
+                        <div><strong>Usuario:</strong> <code>{{k.username}}</code></div>
+                        <div><strong>Contraseña:</strong> <code>{{k.password}}</code></div>
+                        {% if k.file %}
+                        <div><strong>Archivo:</strong> <a href="{{k.file.url}}">{{k.file}}</a></div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center my-3">No hay historial registrado.</p>
                     {% endfor %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
+
 <script>
-function copyToClipboard(element) {
-  var $temp = $("<input>");
-  $("body").append($temp);
-  $temp.val($(element).text()).select();
-  document.execCommand("copy");
-  $temp.remove();
+function copyField(elementSelector, btnSelector) {
+    var text = $(elementSelector).text().trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+    } else {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(text).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+    var $btn = $(btnSelector);
+    var originalHtml = $btn.html();
+    $btn.removeClass('btn-outline-primary').addClass('btn-success').html('<i class="fas fa-check mr-1"></i> ¡Copiado!');
+    setTimeout(function() {
+        $btn.removeClass('btn-success').addClass('btn-outline-primary').html(originalHtml);
+    }, 1800);
+}
+
+function togglePasswordView() {
+    var $input = $('#id_password_display');
+    var $icon = $('#toggle-pass-icon');
+    if ($input.attr('type') === 'password') {
+        $input.attr('type', 'text');
+        $icon.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+        $input.attr('type', 'password');
+        $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
 }
 </script>
 </main>

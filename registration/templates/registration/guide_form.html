@@ -1,21 +1,22 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block content %}
 {% load crispy_forms_tags %}
+{% block title %}Nueva Guía | IT Manager{% endblock %}
+
+{% block content %}
 <main role="main">
-  <div class="container-fluid">
-    <ol class="breadcrumb breadcrumb-right-arrow">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guides</a></li>
-        <li class="breadcrumb-item active" >Create guide</li>
+  <div class="container-fluid px-lg-4">
+    <ol class="breadcrumb shadow-sm mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'guide_list' %}">Guías Técnicas</a></li>
+        <li class="breadcrumb-item active">Crear Guía</li>
     </ol>
-    <div class="row">
-      <div class="col-md-12 mx-auto">
-        {% if 'edited' in request.GET %}
-          <p style="color:green;">Guide edited</p>
-        {% endif %}
-        {% crispy form %}
-      </div>
+    <div class="card border-0 shadow-sm p-4">
+      <h5 class="font-weight-bold text-dark mb-3"><i class="fas fa-book-reader text-success mr-2"></i>Redactar Guía Técnica</h5>
+      {% if 'edited' in request.GET %}
+        <div class="alert alert-success">Guía editada exitosamente.</div>
+      {% endif %}
+      {% crispy form %}
     </div>
   </div>
 </main>
