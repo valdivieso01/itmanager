@@ -5,10 +5,15 @@
 {% block content %}
 <main role="main">
   <div class="container-fluid px-lg-4">
-    <ol class="breadcrumb shadow-sm mb-4">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
-        <li class="breadcrumb-item active">Grupos & Infraestructura</li>
-    </ol>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <ol class="breadcrumb shadow-sm mb-0 flex-grow-1 mr-3">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+            <li class="breadcrumb-item active">Grupos & Infraestructura</li>
+        </ol>
+        <a href="{% url 'group_create' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-plus mr-1"></i> Nuevo Grupo
+        </a>
+    </div>
 
     {% if 'created' in request.GET %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -73,25 +78,21 @@
             <div class="card p-5 text-center text-muted">
                 <i class="fas fa-layer-group fa-3x mb-3 text-secondary"></i>
                 <h5 class="font-weight-bold">No hay grupos creados</h5>
-                <p class="mb-0">Comienza creando tu primer grupo de infraestructura con el botón flotante inferior.</p>
+                <p class="mb-3">Comienza creando tu primer grupo de infraestructura.</p>
+                <div>
+                    <a href="{% url 'group_create' %}" class="btn btn-primary btn-sm px-3">
+                        <i class="fas fa-plus mr-1"></i> Crear Primer Grupo
+                    </a>
+                </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Floating Action Button -->
-    <div id="container-floating">
-        <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add group">
-            <p class="letter">
-                <a style="text-decoration:none;color:white" href="{% url 'group_create' %}">
-                    <i class="fa fa-users"></i>
-                </a>
-            </p>
-        </div>
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" title="Acciones">
-            <p class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></p>
-        </div>
-    </div>
+    <!-- Direct 1-Click Floating Action Button -->
+    <a id="floating-button" href="{% url 'group_create' %}" data-toggle="tooltip" data-placement="left" title="Nuevo Grupo" style="text-decoration: none;">
+        <span class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></span>
+    </a>
   </div>
 </main>
 {% endblock %}
