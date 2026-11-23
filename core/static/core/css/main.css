@@ -491,20 +491,65 @@ body {
 
 @media screen and (min-width: 768px) {
   .page-wrapper.toggled .page-content {
-    padding-left: 0px;
+    padding-left: 260px;
   }
 }
+
+.page-wrapper .page-content {
+  display: block;
+  width: 100%;
+  padding-left: 0px;
+  padding-top: 15px;
+  transition: padding-left 0.3s ease;
+}
+
 /*----------------show sidebar button----------------*/
 #show-sidebar {
-  position: absolute;
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: 1.25rem;
+  line-height: 1;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+#show-sidebar:hover, #show-sidebar:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #38bdf8;
+  outline: none;
+}
+
+.page-wrapper.toggled #show-sidebar {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #38bdf8;
+}
+
+.sidebar-overlay {
+  position: fixed;
   top: 0;
   left: 0;
-  border-radius: 0 4px 4px 0px;
-  width: 35px;
-  transition-delay: 0.3s;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
-.page-wrapper.toggled #show-sidebar {
-  left: -40px;
+
+.page-wrapper.toggled .sidebar-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (min-width: 768px) {
+  .page-wrapper.toggled .sidebar-overlay {
+    display: none;
+    visibility: hidden;
+  }
 }
 /*----------------sidebar-wrapper----------------*/
 
