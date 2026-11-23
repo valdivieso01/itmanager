@@ -4,13 +4,30 @@ WSGI config for tesis project.
 It exposes the WSGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
+https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
-from django.core.wsgi import get_wsgi_application
+# Asegurar que el directorio raíz del proyecto esté en sys.path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tesis.settings")
 
+# Auto-migración en Vercel para SQLite en /tmp en el primer arranque
+if os.environ.get('VERCEL') == '1' and not os.path.exists('/tmp/db.sqlite3'):
+    try:
+        import django
+        django.setup()
+        from django.core.management import call_command
+        call_command('migrate', interactive=False)
+    except Exception as e:
+        print(f'[Vercel Startup] Auto-migration notice: {e}')
+
+from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
+app = application
