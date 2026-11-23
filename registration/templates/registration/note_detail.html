@@ -1,31 +1,30 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}{{note.name}} | Nota Técnica{% endblock %}
+
 {% block content %}
-<style>
-.scroll {overflow: auto; white-space: nowrap;}
-</style>
 <main role="main">
-    <div class="container-fluid">
-        <ol class="breadcrumb breadcrumb-right-arrow ">
-          <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'note_list' %}">Notes</a></li>
+    <div class="container-fluid px-lg-4">
+        <ol class="breadcrumb shadow-sm mb-4">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'note_list' %}">Notas</a></li>
           <li class="breadcrumb-item active">{{note.name}}</li>
         </ol>
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto mt-2">
-                <div class="card mb-3">
-		    <div class="card-header font-weight-bold align-middle">
-        	        {{note.name}}
-			<a href="{% url 'note_update' note.name|slugify %}" class="btn btn-secondary btn-sm float-right"><i class="fa fa-edit"></i></a>
-	            </div>
-                    <div class="card-body">
-			<div class="scroll">
-			    <p class="card-text">
-                    	        {{note.note|safe}}
-                    	    </p>
-			</div>
-                    </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                <div class="d-flex align-items-center">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 38px; height: 38px; background-color: #faf5ff; color: #9333ea;">
+                        <i class="fas fa-sticky-note"></i>
+                    </span>
+                    <h5 class="mb-0 font-weight-bold text-dark">{{note.name}}</h5>
                 </div>
+                <a href="{% url 'note_update' note.name|slugify %}" class="btn btn-primary btn-sm">
+                    <i class="fa fa-edit mr-1"></i> Editar
+                </a>
+            </div>
+            <div class="card-body p-4" style="overflow-x: auto; line-height: 1.7;">
+                {{note.note|safe|default:"Sin contenido."}}
             </div>
         </div>
     </div>

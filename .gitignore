@@ -25,3 +25,8 @@ venv/
 core/migrations/
 registration/migrations/
 messenger/migrations/
+
+# Node / Frontend legacy artifacts
+node_modules/
+package-lock.json
+

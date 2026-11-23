@@ -2,79 +2,105 @@
 {% load static %}
 {% load qr_code %}
 {% load core_tags %}
+{% block title %}{{backup.name}} | Backup IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-  <div class="container">
-      <ol class="breadcrumb breadcrumb-right-arrow ">
-        <li class="breadcrumb-item"><a href=".">Home</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'group_detail' backup.set.group.name|slugify %}">Sets</a></li>
+  <div class="container-fluid px-lg-4">
+    <ol class="breadcrumb shadow-sm mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'group_detail' backup.set.group.name|slugify %}">{{backup.set.group.name}}</a></li>
         <li class="breadcrumb-item"><a href="{% url 'set_detail' backup.set.group.name|slugify backup.set.name|slugify %}">{{backup.set.name}}</a></li>
         <li class="breadcrumb-item active">{{backup.name}}</li>
     </ol>
-    <div class="row mt-3">
-        <div class="col-md-12 mx-auto text-center">
-            <h2 class="section-heading mb-2">
-                {{backup.name}}
-            </h2>
-     	    <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fas fa-qrcode"></i></button>
-            <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target=".bs-example-modal-xs"><i class="fas fa-info"></i></button>
-	    <a href="{% url 'backup_update' backup.set.group.name|slugify backup.set.name|slugify backup.name|slugify %}" class="btn btn-primary mb-2"><i class="fas fa-edit"></i></a>
-        </div>
-        <div class="col-md-12 mx-auto">
-            <div class="card mb-3">
-            <h5 class="card-header">Note</h5>
-                <div class="card-body">
-                <p class="card-text">
-                    {{backup.note}}
-                </p>
+
+    <div class="card border-0 shadow-sm mb-4 p-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+            <div class="d-flex align-items-center mb-3 mb-md-0">
+                <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #eff6ff; color: #2563eb; font-size: 20px;">
+                    <i class="fas fa-database"></i>
+                </span>
+                <div>
+                    <h3 class="font-weight-bold text-dark mb-0">{{backup.name}}</h3>
+                    <small class="text-muted">Copia de Seguridad — {{backup.set.name}}</small>
                 </div>
             </div>
-            <div class="card mb-3">
-              <h5 class="card-header">Files</h5>
-              <div class="card-body">
-                <p class="card-text">
-                {% if backup.file.url != blanck %}
-                  <a href="{{backup.file.url}}" download>{{backup.file | getfilename}}</a>
-                {% else %}
-                  Empty
-                {% endif %}
-                </p>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-        <div class="modal-dialog modal-xs" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="info">Info</h5>
-                </div>
-                <div class="modal-content text-center">
-                     Created by {{backup.created_by}} on {{backup.created_at}}<br>
-                     Last edition by {{backup.last_modified_by}} on {{backup.last_modified_at}}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+            <div>
+                <button type="button" class="btn btn-outline-dark btn-sm mr-1" data-toggle="modal" data-target=".bs-example-modal-sm" title="Código QR">
+                    <i class="fas fa-qrcode mr-1"></i> QR
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm mr-1" data-toggle="modal" data-target=".bs-example-modal-xs" title="Auditoría">
+                    <i class="fas fa-info-circle mr-1"></i> Info
+                </button>
+                <a href="{% url 'backup_update' backup.set.group.name|slugify backup.set.name|slugify backup.name|slugify %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit mr-1"></i> Editar
+                </a>
             </div>
         </div>
     </div>
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header py-2">
+            <span><i class="fas fa-sticky-note text-muted mr-2"></i><strong>Notas y Detalles del Backup</strong></span>
+        </div>
+        <div class="card-body">
+            <p class="card-text mb-0" style="white-space: pre-wrap;">{{backup.note|default:"Sin notas adicionales."}}</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-2">
+            <span><i class="fas fa-paperclip text-muted mr-2"></i><strong>Archivo de Respaldo</strong></span>
+        </div>
+        <div class="card-body">
+            {% if backup.file %}
+                <a href="{{backup.file.url}}" download class="btn btn-sm btn-outline-dark">
+                    <i class="fas fa-download mr-1"></i> {{backup.file | getfilename}}
+                </a>
+            {% else %}
+                <span class="text-muted small">Sin archivo adjunto</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-xs" tabindex="-1" role="dialog" aria-labelledby="info">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold" id="info"><i class="fas fa-info-circle mr-2 text-primary"></i>Auditoría</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2"><strong>Creado por:</strong> {{backup.created_by}} el {{backup.created_at}}</p>
+                    <p class="mb-0"><strong>Última edición:</strong> {{backup.last_modified_by}} el {{backup.last_modified_at}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="qr-code">
         <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="qr-code">QR code</h5>
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title font-weight-bold" id="qr-code"><i class="fas fa-qrcode mr-2 text-primary"></i>Código QR</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div id="areaImprimir" class="modal-body mx-auto">
+                <div id="areaImprimir" class="modal-body text-center py-4">
+                    <div class="font-weight-bold mb-2">{{backup.name}}</div>
                     {% backup_url request.META.HTTP_HOST backup.id as backup_qr %}
                     {% qr_from_text backup_qr size="M" %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="printDiv('areaImprimir')"><i class="fas fa-print mr-1"></i>Imprimir</button>
                 </div>
             </div>
         </div>
     </div>
+  </div>
 </main>
 {% endblock %}
