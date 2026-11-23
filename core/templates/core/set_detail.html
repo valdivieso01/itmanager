@@ -2,281 +2,304 @@
 {% load static %}
 {% load qr_code %}
 {% load core_tags %}
+{% block title %}{{set.name}} | {{set.group.name}} - IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-    <div class="container">
-        <ol class="breadcrumb breadcrumb-right-arrow">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Groups</a></li>
+    <div class="container-fluid px-lg-4">
+        <ol class="breadcrumb shadow-sm mb-4">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'group_list' %}">Grupos</a></li>
             <li class="breadcrumb-item"><a href="{% url 'group_detail' set.group.name|slugify %}">{{set.group.name}}</a></li>
             <li class="breadcrumb-item active">{{set.name}}</li>
         </ol>
-        <div class="row justify-content-center">
-            <div class="col-md">
-                <form class="" method="GET" action="">
-                <div class="row">
-                    <div class="col input-group">
-                        <input class="form-control" type="text" placeholder="Search item's set" name="q" value="{{ request.GET.q }}">
-                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button> 
+
+        {% if 'edited' in request.GET %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Conjunto editado exitosamente.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+            </div>
+        {% elif 'deleted' in request.GET %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Elemento eliminado exitosamente.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+            </div>
+        {% elif 'created' in request.GET %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Conjunto creado exitosamente.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+            </div>
+        {% endif %}
+
+        <!-- Set Header & Quick Actions -->
+        <div class="card border-0 shadow-sm mb-4 p-4">
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
+                <div class="mb-3 mb-lg-0">
+                    <div class="d-flex align-items-center">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #eff6ff; color: #2563eb; font-size: 20px;">
+                            <i class="fas fa-cubes"></i>
+                        </span>
+                        <div>
+                            <h3 class="font-weight-bold text-dark mb-0">{{set.name}}</h3>
+                            <p class="text-muted small mb-0">{{set.description|default:"Conjunto de recursos e infraestructura del grupo"}}</p>
+                        </div>
                     </div>
                 </div>
+                <div class="d-flex flex-wrap align-items-center">
+                    <a href="{% url 'key_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-primary mr-2 mb-1">
+                        <i class="fas fa-key mr-1"></i> + Credencial
+                    </a>
+                    <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-success mr-2 mb-1">
+                        <i class="fas fa-book mr-1"></i> + Guía
+                    </a>
+                    <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-info mr-2 mb-1">
+                        <i class="fas fa-database mr-1"></i> + Backup
+                    </a>
+                    <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-secondary mr-2 mb-1">
+                        <i class="fas fa-clipboard-check mr-1"></i> + Relevamiento
+                    </a>
+                    <button type="button" class="btn btn-sm btn-dark mb-1" data-toggle="modal" data-target="#qr-code-modal" title="Ver Código QR">
+                        <i class="fas fa-qrcode mr-1"></i> QR
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8 col-lg-6">
+                <form method="GET" action="">
+                    <div class="input-group shadow-sm">
+                        <input class="form-control" type="text" placeholder="Filtrar elementos de {{set.name}}..." name="q" value="{{ request.GET.q }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search mr-1"></i> Buscar</button>
+                            {% if request.GET.q %}
+                            <a href="?" class="btn btn-outline-secondary">Limpiar</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
-    	<div class="row mt-3 ">
-            <div class="col-md-12 mx-auto text-center">
-                <h2><strong>{{set.name}}</strong></h2>
-                <h5>{{set.description}}</h5>
-               {% if 'edited' in request.GET %}
-                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                        <i class="fas fa-check-circle mr-2"></i> Conjunto editado exitosamente.
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+
+        <!-- Accordion Sections -->
+        <div id="accordion">
+            <!-- 1. KEYS -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingOne" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <div class="d-flex align-items-center">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #fffbeb; color: #d97706;">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        <h6 class="mb-0 font-weight-bold text-dark">Credenciales & Llaves (Keys)</h6>
+                        <span class="badge badge-pill badge-light border ml-2 px-2 py-1">{{ set.key_set.count }}</span>
                     </div>
-                {% elif 'deleted' in request.GET %}
-                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                        <i class="fas fa-check-circle mr-2"></i> Conjunto eliminado exitosamente.
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                {% elif 'created' in request.GET %}
-                    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                        <i class="fas fa-check-circle mr-2"></i> Conjunto creado exitosamente.
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-12 mx-auto ">
-                <div id="accordion">
-                    <div class="card">
-                        <div class="card-header text-center" id="headingOne">
-                            <div class="mb-0">
-                             <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				<h5 class="card-text"><strong>Keys</strong></h5>
-			    </button>
-			    </div>
-                        </div>
-                    </div>
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                    {% if request.GET.q != blanck %}
-                    {% for key in set.key_set.all %}
-                    {% if request.GET.q in key.name %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                      <h5 class="card-text"><strong>{{key.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'key_detail' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'key_update' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'key_delete' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
+                    <i class="fas fa-chevron-down text-muted"></i>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                    <div class="card-body bg-light">
+                        {% for key in set.key_set.all %}
+                            {% if not request.GET.q or request.GET.q|lower in key.name|lower %}
+                            <div class="card mb-2 border-0 shadow-sm">
+                                <div class="card-body py-2 px-3">
+                                    <div class="row align-items-center">
+                                        <div class="col title-cut">
+                                            <strong class="text-dark"><i class="fas fa-key text-warning mr-2"></i>{{key.name}}</strong>
+                                            {% if key.username %}<small class="text-muted ml-2">({{key.username}})</small>{% endif %}
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="{% url 'key_detail' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-outline-primary btn-sm mr-1" title="Ver"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'key_update' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-outline-secondary btn-sm mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'key_delete' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}  
-                    {% endfor %}
-                    {% else %} 
-                    {% for key in set.key_set.all %}
-                        <div class="card">                      
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                      <h5 class="card-text"><strong>{{key.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'key_detail' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'key_update' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'key_delete' set.group.name|slugify set.name|slugify key.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="text-center py-3 text-muted">
+                                <p class="mb-2 small">No hay credenciales cargadas en este conjunto todavía.</p>
+                                <a href="{% url 'key_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus mr-1"></i> Agregar Credencial
+                                </a>
                             </div>
-                        </div>
-                    {% endfor %}
-                    {% endif %} 
-                    </div>
-                    <div class="card">
-                        <div class="card-header text-center" id="headingTwo">
-                          <h4 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                              <h5 class="card-text"><strong>Guides</strong></h5>
-                            </button>
-                          </h5>
-                        </div>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    {% if request.GET.q != blanck %}
-                    {% for guide in set.guide_set.all %}
-                    {% if request.GET.q in guide.name %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                    <h5 class="card-tetx"><strong>{{guide.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-ms"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-ms"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-ms"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}  
-                    {% endfor %}
-                    {% else %} 
-                    {% for guide in set.guide_set.all %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                    <h5 class="card-text"><strong>{{guide.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-primary btn-ms"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-secondary btn-ms"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-danger btn-ms"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% endif %}  
-                    </div>
-                    <div class="card">
-                        <div class="card-header text-center" id="headingThree">
-                          <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                              <h5 class="card-text"><strong>Backups</strong></h5>
-                            </button>
-                          </h5>
-                        </div>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    {% if request.GET.q != blanck %}
-                    {% for backup in set.backup_set.all %}
-                    {% if request.GET.q in backup.name %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                    <h5 class="card-text"><strong>{{backup.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'backup_detail' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'backup_update' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'backup_delete' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}  
-                    {% endfor %}
-                    {% else %} 
-                    {% for backup in set.backup_set.all %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                    <h5 class="card-text"><strong>{{backup.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'backup_detail' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'backup_update' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'backup_delete' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% endif %}  
-                    </div>
-                    <div class="card">
-                        <div class="card-header text-center" id="headingFour">
-                          <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                                 <h5 class="card-text"><strong>Surveys</strong></h5>
-                            </button>
-                          </h5>
-                        </div>
-                    </div>
-                    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                    {% if request.GET.q != blanck %}
-                    {% for survey in set.survey_set.all %}
-                    {% if request.GET.q in survey.name %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                      <h5 class="card-text"><strong>{{survey.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'survey_detail' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'survey_update' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'survey_delete' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}  
-                    {% endfor %}
-                    {% else %} 
-                    {% for survey in set.survey_set.all %}
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                  <div class="col title-cut">
-                                    <h5 class="card-text"><strong>{{survey.name}}</strong></h5>
-                                  </div>
-                                  <div class="col-auto">
-                                      <a href="{% url 'survey_detail' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
-                                      <a href="{% url 'survey_update' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-secondary btn-xs"><i class="fa fa-edit"></i></a>
-                                      <a href="{% url 'survey_delete' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    {% endif %}  
+                        {% endfor %}
                     </div>
                 </div>
- 	    <div class="modal fade" id="qr-code" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        	<div class="modal-dialog" role="document">
-	            <div class="modal-content">
-        	        <div class="modal-header">
-                	    <h5 class="modal-title" id="qr-code">QR code</h5>
-	                </div>
-        	        <div id="areaImprimir" class="modal-body mx-auto">
-				{% set_url request.META.HTTP_HOST set.id as set_qr%}
-				{% qr_from_text set_qr size="M" %}
-	                </div>
-        	        <div class="modal-footer">
-                	    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	                    <button type="button" class="btn btn-primary" onclick="printDiv('areaImprimir')">Print</button>
-        	        </div>
-	            </div>
-        	</div>
-	    </div>
+            </div>
+
+            <!-- 2. GUIDES -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingTwo" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <div class="d-flex align-items-center">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #f0fdf4; color: #16a34a;">
+                            <i class="fas fa-book-reader"></i>
+                        </span>
+                        <h6 class="mb-0 font-weight-bold text-dark">Guías Técnicas (Guides)</h6>
+                        <span class="badge badge-pill badge-light border ml-2 px-2 py-1">{{ set.guide_set.count }}</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-muted"></i>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo">
+                    <div class="card-body bg-light">
+                        {% for guide in set.guide_set.all %}
+                            {% if not request.GET.q or request.GET.q|lower in guide.name|lower %}
+                            <div class="card mb-2 border-0 shadow-sm">
+                                <div class="card-body py-2 px-3">
+                                    <div class="row align-items-center">
+                                        <div class="col title-cut">
+                                            <strong class="text-dark"><i class="fas fa-book text-success mr-2"></i>{{guide.name}}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-outline-primary btn-sm mr-1" title="Ver"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'guide_update' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-outline-secondary btn-sm mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'guide_delete' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="text-center py-3 text-muted">
+                                <p class="mb-2 small">No hay guías técnicas en este conjunto todavía.</p>
+                                <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-success">
+                                    <i class="fas fa-plus mr-1"></i> Crear Guía
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. BACKUPS -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingThree" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    <div class="d-flex align-items-center">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #eff6ff; color: #2563eb;">
+                            <i class="fas fa-database"></i>
+                        </span>
+                        <h6 class="mb-0 font-weight-bold text-dark">Copias de Seguridad (Backups)</h6>
+                        <span class="badge badge-pill badge-light border ml-2 px-2 py-1">{{ set.backup_set.count }}</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-muted"></i>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree">
+                    <div class="card-body bg-light">
+                        {% for backup in set.backup_set.all %}
+                            {% if not request.GET.q or request.GET.q|lower in backup.name|lower %}
+                            <div class="card mb-2 border-0 shadow-sm">
+                                <div class="card-body py-2 px-3">
+                                    <div class="row align-items-center">
+                                        <div class="col title-cut">
+                                            <strong class="text-dark"><i class="fas fa-database text-primary mr-2"></i>{{backup.name}}</strong>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="{% url 'backup_detail' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-outline-primary btn-sm mr-1" title="Ver"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'backup_update' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-outline-secondary btn-sm mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'backup_delete' set.group.name|slugify set.name|slugify backup.name|slugify %}" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="text-center py-3 text-muted">
+                                <p class="mb-2 small">No hay registros de backup en este conjunto todavía.</p>
+                                <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-plus mr-1"></i> Registrar Backup
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SURVEYS -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingFour" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    <div class="d-flex align-items-center">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #faf5ff; color: #9333ea;">
+                            <i class="fas fa-clipboard-check"></i>
+                        </span>
+                        <h6 class="mb-0 font-weight-bold text-dark">Relevamientos Técnicos (Surveys)</h6>
+                        <span class="badge badge-pill badge-light border ml-2 px-2 py-1">{{ set.survey_set.count }}</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-muted"></i>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour">
+                    <div class="card-body bg-light">
+                        {% for survey in set.survey_set.all %}
+                            {% if not request.GET.q or request.GET.q|lower in survey.name|lower %}
+                            <div class="card mb-2 border-0 shadow-sm">
+                                <div class="card-body py-2 px-3">
+                                    <div class="row align-items-center">
+                                        <div class="col title-cut">
+                                            <strong class="text-dark"><i class="fas fa-clipboard-list text-purple mr-2"></i>{{survey.name}}</strong>
+                                            {% if survey.company %}<small class="text-muted ml-2">— {{survey.company}}</small>{% endif %}
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="{% url 'survey_detail' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-outline-primary btn-sm mr-1" title="Ver"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'survey_update' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-outline-secondary btn-sm mr-1" title="Editar"><i class="fa fa-edit"></i></a>
+                                            <a href="{% url 'survey_delete' set.group.name|slugify set.name|slugify survey.name|slugify %}" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="text-center py-3 text-muted">
+                                <p class="mb-2 small">No hay relevamientos técnicos en este conjunto todavía.</p>
+                                <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-plus mr-1"></i> Nuevo Relevamiento
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Modal -->
+        <div class="modal fade" id="qr-code-modal" tabindex="-1" role="dialog" aria-labelledby="qr-code-title" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title font-weight-bold" id="qr-code-title"><i class="fas fa-qrcode mr-2 text-primary"></i>Código QR</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div id="areaImprimir" class="modal-body text-center py-4">
+                        <div class="font-weight-bold mb-2">{{set.name}}</div>
+                        {% set_url request.META.HTTP_HOST set.id as set_qr%}
+                        {% qr_from_text set_qr size="M" %}
+                        <div class="small text-muted mt-2">{{set.group.name}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="printDiv('areaImprimir')"><i class="fas fa-print mr-1"></i>Imprimir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <div id="container-floating">
+          <div class="nd5 nds" data-toggle="tooltip" data-placement="left" title="Código QR">
+              <p class="letter"><a style="text-decoration:none;color:white" href="#" data-toggle="modal" data-target="#qr-code-modal"><i class="fa fa-qrcode"></i></a></p>
           </div>
-       	  <div id="container-floating">
-          <div class="nd5 nds" data-toggle="tooltip" data-placement="left" title="Show QR">
-              <p class="letter"><a style="text-decoration:none;color:white" href="#" data-toggle="modal" data-target="#qr-code"><i class="fa fa-qrcode"></i></a></p>
+          <div class="nd4 nds" data-toggle="tooltip" data-placement="left" title="Nueva Credencial">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'key_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-key"></i></a></p>
           </div>
-          <div class="nd4 nds" data-toggle="tooltip" data-placement="left" title="Add key">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'key_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-key "></i></a></p>
+          <div class="nd3 nds" data-toggle="tooltip" data-placement="left" title="Nuevo Backup">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-database"></i></a></p>
           </div>
-          <div class="nd3 nds" data-toggle="tooltip" data-placement="left" title="Add backup">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-copy "></i></a></p>
+          <div class="nd2 nds" data-toggle="tooltip" data-placement="left" title="Nueva Guía">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-book"></i></a></p>
           </div>
-          <div class="nd2 nds" data-toggle="tooltip" data-placement="left" title="Add guide">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-book "></i></a></p>
+          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Nuevo Relevamiento">
+              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-clipboard-check"></i></a></p>
           </div>
-          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add survey">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}"><i class="fa fa-edit "></i></a></p>
-          </div>
-          <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
-              <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
+          <div id="floating-button" data-toggle="tooltip" data-placement="left" title="Acciones">
+              <p class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></p>
           </div>
         </div>
     </div>
