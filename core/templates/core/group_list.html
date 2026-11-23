@@ -1,66 +1,95 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}Grupos & Infraestructura | IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-  <div class="container">
-    <ol class="breadcrumb breadcrumb-right-arrow">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-        <li class="breadcrumb-item active" >Groups</li>
+  <div class="container-fluid px-lg-4">
+    <ol class="breadcrumb shadow-sm mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+        <li class="breadcrumb-item active">Grupos & Infraestructura</li>
     </ol>
+
     {% if 'created' in request.GET %}
-      <p class="text-center" style="color:green;">Group successfully created!</p>
-    {%  elif 'deleted' in request.GET %}
-      <p class="text-center" style="color:green;">Group successfully deleted!</p>
-    {%  elif 'edited' in request.GET %}
-      <p class="text-center" style="color:green;">Group successfully edited!</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Grupo creado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% elif 'deleted' in request.GET %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Grupo eliminado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+    {% elif 'edited' in request.GET %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Grupo editado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% endif %}
+
     <div class="row">
-	{% if group_list %}
         {% for group in group_list %}
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card-group">           
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <div class="row align-items-start">
-                          <div class="col-10">
-                              <div class="card-title title-cut"><strong>{{group.name}}</strong></div>
-                          </div>
-                          <div class="col-2">
-                              <i class="fa fa-ellipsis-v fa-border"type="button" data-toggle="dropdown"></i>
-                              <div class="dropdown-menu dropdown-menu-right">
-                                  <a class="dropdown-item" href="{% url 'group_update' group.name|slugify %}">Edit</a>
-                                  <a class="dropdown-item" href="{% url 'group_delete' group.name|slugify %}">Delete</a>
-                              </div>
-                          </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                    <h6 class="mb-0 font-weight-bold text-dark title-cut">
+                        <i class="fas fa-folder text-primary mr-2"></i>{{group.name}}
+                    </h6>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-link text-muted" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-sm border-0">
+                            <a class="dropdown-item" href="{% url 'group_update' group.name|slugify %}">
+                                <i class="fas fa-edit text-muted mr-2"></i>Editar
+                            </a>
+                            <a class="dropdown-item text-danger" href="{% url 'group_delete' group.name|slugify %}">
+                                <i class="fas fa-trash mr-2"></i>Eliminar
+                            </a>
                         </div>
                     </div>
-                    <div class="card-body">
-                    {% if group.image %}
-                        <a href="{% url 'group_detail' group.name|slugify %}"><img src="{{group.image.url}}" width="300" height="300" class="card-img-top rounded-circle "></a>
-                    {% else %}
-                        <a href="{% url 'group_detail' group.name|slugify %}"><img src="{% static 'core/img/group-icon.png' %}" width="300" height="300" class="card-img-top rounded-circle "></a>
-                    {% endif %}
-                    </div>
-                    <div class="card-footer">
-                        {% if group.description %}
-                            <p class="card-text text-center title-cut">{{group.description}}</p>
-                        {% else %}
-                            <p class="card-text text-center">No description </p>
-                        {% endif %}
-                    </div>
                 </div>
-	    </div>
-         </div>
-	{% endfor %}
-        {% else %}
-            <div class="col-md-12 text-center">Groups Empty, please create a new group using the button in the end of the page</div>
-        {% endif %}
+                <div class="card-body text-center d-flex flex-column align-items-center justify-content-center py-4">
+                    <a href="{% url 'group_detail' group.name|slugify %}" class="d-inline-block position-relative mb-3">
+                        {% if group.image %}
+                            <img src="{{group.image.url}}" width="110" height="110" class="rounded-circle shadow-sm" style="object-fit: cover;" alt="{{group.name}}">
+                        {% else %}
+                            <img src="{% static 'core/img/group-icon.png' %}" width="110" height="110" class="rounded-circle shadow-sm" style="object-fit: cover;" alt="{{group.name}}">
+                        {% endif %}
+                    </a>
+                    <p class="card-text text-muted small text-center mb-0 px-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        {{group.description|default:"Sin descripción"}}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-top-0 pt-0 pb-3 text-center">
+                    <a href="{% url 'group_detail' group.name|slugify %}" class="btn btn-sm btn-outline-primary btn-block">
+                        Explorar Conjuntos & Relevamientos <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card p-5 text-center text-muted">
+                <i class="fas fa-layer-group fa-3x mb-3 text-secondary"></i>
+                <h5 class="font-weight-bold">No hay grupos creados</h5>
+                <p class="mb-0">Comienza creando tu primer grupo de infraestructura con el botón flotante inferior.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Floating Action Button -->
     <div id="container-floating">
         <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add group">
-            <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'group_create' %}"><i class="fa fa-users"></i></a></p>
+            <p class="letter">
+                <a style="text-decoration:none;color:white" href="{% url 'group_create' %}">
+                    <i class="fa fa-users"></i>
+                </a>
+            </p>
         </div>
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
-            <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" title="Acciones">
+            <p class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></p>
         </div>
     </div>
   </div>

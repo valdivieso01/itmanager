@@ -1,69 +1,96 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% block title %}Guías & Documentación | IT Manager{% endblock %}
+
 {% block content %}
 <main role="main">
-  <div class="container ml-auto">
-    <ol class="breadcrumb breadcrumb-right-arrow">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-        <li class="breadcrumb-item active" >Guides</li>
+  <div class="container-fluid px-lg-4">
+    <ol class="breadcrumb shadow-sm mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+        <li class="breadcrumb-item active">Guías Técnicas</li>
     </ol>
-    <div class="row justify-content-center">
-        <div class="col-md">
-            <form class="" method="GET" action="">
-                <div class="row">
-                    <div class="col input-group">
-                        <input class="form-control" type="text" placeholder="Search guides" name="q" value="{{ request.GET.q }}">
-                        <button class="btn btn btn-success" type="submit" value="Search"><i class="fas fa-search"></i></button>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8 col-lg-6">
+            <form method="GET" action="">
+                <div class="input-group shadow-sm">
+                    <input class="form-control" type="text" placeholder="Buscar guías..." name="q" value="{{ request.GET.q }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-search mr-1"></i> Buscar</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
     {% if 'edited' in request.GET %}
-        <p class="text-center" style="color:green;">Note edited succefully</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Guía editada exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% elif 'deleted' in request.GET %}
-        <p class="text-center" style="color:green;">Note deleted succefully</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Guía eliminada exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% elif 'created' in request.GET %}
-        <p class="text-center" style="color:green;">Note created succefully</p>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Guía creada exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% endif %}
-    {% if object_list %}
+
     <div class="row">
-      <div class="col-md">
- 	  {% for guide in object_list %}
-              <div class="row justify-content-center">
-                <div class="col-md">
-                  <div class="card-group">
-                    <div class="card">
-                      <h5 class="card-header">
+        <div class="col-12">
+            {% for guide in object_list %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body py-3">
                         <div class="row align-items-center">
-                          <div class="col title-cut">
-                            <strong>{{guide.name}}</strong>
-                          </div>
-                          <div class="col-auto">
-                            <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-primary"><i class="fa fa-eye"></i></a>
-                            <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
-                            <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                          </div>
+                            <div class="col d-flex align-items-center title-cut">
+                                <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 42px; height: 42px; background-color: #f0fdf4; color: #16a34a;">
+                                    <i class="fas fa-book-reader"></i>
+                                </span>
+                                <div>
+                                    <h6 class="mb-0 font-weight-bold text-dark">{{guide.name}}</h6>
+                                    <small class="text-muted">Documentación y manual técnico</small>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'guide_detail' guide.name|slugify %}" class="btn btn-sm btn-outline-primary mr-1" title="Ver Guía">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="{% url 'guide_update' guide.name|slugify %}" class="btn btn-sm btn-outline-secondary mr-1" title="Editar">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="{% url 'guide_delete' guide.name|slugify %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
                         </div>
-                      </h5>
                     </div>
-                  </div>
                 </div>
-              </div>
-         {% endfor %}
+            {% empty %}
+                <div class="card p-5 text-center text-muted">
+                    <i class="fas fa-book-open fa-3x mb-3 text-secondary"></i>
+                    <p class="mb-0">No hay guías registradas. Crea una nueva usando el botón inferior.</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
-    {% else %}
-        <div class="col-md-12 text-center">Guides Empty, please create a new guides using the button in the end of the page</div>
-    {% endif %}
-      <div id="container-floating">
-          <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add guide">
-              <p class="letter"><a style="text-decoration:none;color:white" href="{% url 'guide_create' %}"><i class="fa fa-book"></i></a></p>
-          </div>
-          <div id="floating-button" data-toggle="tooltip" data-placement="left" onclick="newmail()">
-              <p class="plus">+</p> <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png" />
-          </div>
-      </div>
+
+    <!-- Floating Action Button -->
+    <div id="container-floating">
+        <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add guide">
+            <p class="letter">
+                <a style="text-decoration:none;color:white" href="{% url 'guide_create' %}">
+                    <i class="fa fa-book"></i>
+                </a>
+            </p>
+        </div>
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" title="Acciones">
+            <p class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></p>
+        </div>
+    </div>
   </div>
 </main>
 {% endblock %}

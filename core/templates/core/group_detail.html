@@ -22,11 +22,20 @@
         </div>
     </div>
     {% if 'edited' in request.GET %}
-        <p class="text-center" style="color:green;">Set edited succefully</p>
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Conjunto editado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% elif 'deleted' in request.GET %}
-        <p class="text-center" style="color:green;">Set deleted succefully</p>
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Conjunto eliminado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% elif 'created' in request.GET %}
-        <p class="text-center" style="color:green;">Set created succefully</p>
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> Conjunto creado exitosamente.
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
     {% endif %}
     {% if group.set_set.all %}
     <div class="row">

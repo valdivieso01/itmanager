@@ -13,11 +13,20 @@
             <li class="breadcrumb-item active">{{survey.name}}</li>
         </ol>
         {% if 'edited' in request.GET %}
-            <p style="color:green;">Survey edited succefully</p>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Relevamiento editado exitosamente.
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% elif 'deleted' in request.GET %}
-            <p style="color:green;">Survey deleted succefully</p>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Relevamiento eliminado exitosamente.
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% elif 'created' in request.GET %}
-            <p style="color:green;">Survey created succefully</p>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <i class="fas fa-check-circle mr-2"></i> Relevamiento creado exitosamente.
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
         {% endif %}
         <div class="row mt-3">
             <div class="col-md-12 mx-auto text-center">
