@@ -5,10 +5,15 @@
 {% block content %}
 <main role="main">
   <div class="container-fluid px-lg-4">
-    <ol class="breadcrumb shadow-sm">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
-      <li class="breadcrumb-item active">Usuarios</li>
-    </ol>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <ol class="breadcrumb shadow-sm mb-0 flex-grow-1 mr-3">
+          <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home mr-1"></i>Home</a></li>
+          <li class="breadcrumb-item active">Usuarios</li>
+        </ol>
+        <a href="{% url 'user_create' %}" class="btn btn-primary shadow-sm">
+            <i class="fas fa-user-plus mr-1"></i> Nuevo Usuario
+        </a>
+    </div>
 
     {% if 'edited' in request.GET %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,25 +64,21 @@
             {% empty %}
                 <div class="card p-5 text-center text-muted">
                     <i class="fas fa-users fa-3x mb-3 text-secondary"></i>
-                    <p class="mb-0">No se encontraron usuarios registrados.</p>
+                    <p class="mb-3">No se encontraron usuarios registrados.</p>
+                    <div>
+                        <a href="{% url 'user_create' %}" class="btn btn-primary btn-sm px-3">
+                            <i class="fas fa-user-plus mr-1"></i> Crear Usuario
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <div id="container-floating">
-        <div class="nd1 nds" data-toggle="tooltip" data-placement="left" title="Add user">
-            <p class="letter">
-                <a style="text-decoration:none;color:white" href="{% url 'user_create' %}">
-                    <i class="fa fa-user-plus"></i>
-                </a>
-            </p>
-        </div>
-        <div id="floating-button" data-toggle="tooltip" data-placement="left" title="Acciones">
-            <p class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></p>
-        </div>
-    </div>
+    <!-- Direct 1-Click Floating Action Button -->
+    <a id="floating-button" href="{% url 'user_create' %}" data-toggle="tooltip" data-placement="left" title="Nuevo Usuario" style="text-decoration: none;">
+        <span class="plus"><i class="fas fa-plus" style="font-size: 22px;"></i></span>
+    </a>
   </div>
 </main>
 {% endblock %}

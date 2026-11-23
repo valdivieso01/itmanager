@@ -280,11 +280,11 @@ transition: opacity 400ms ease-in;
 
 @keyframes plus-in{
     from {opacity: 1; transform: rotateZ(0deg);}
-    to {opacity: 0; transform: rotateZ(180deg);}
+    to {opacity: 1; transform: rotateZ(45deg);}
 }
 
 @keyframes plus-out{
-    from {opacity: 0; transform: rotateZ(180deg);}
+    from {opacity: 1; transform: rotateZ(45deg);}
     to {opacity: 1; transform: rotateZ(0deg);}
 }
 
