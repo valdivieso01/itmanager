@@ -105,12 +105,18 @@ WSGI_APPLICATION = 'tesis.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# Fallback elástico: si no hay DATABASE_URL configurada, en Vercel usa /tmp/db.sqlite3
+# Fallback elástico: detecta DATABASE_URL o POSTGRES_URL (Vercel Neon/Postgres), o /tmp/db.sqlite3 en Vercel
 default_sqlite_path = '/tmp/db.sqlite3' if IS_VERCEL else os.path.join(BASE_DIR, 'db.sqlite3')
+database_connection_url = (
+    os.environ.get('DATABASE_URL')
+    or os.environ.get('POSTGRES_URL')
+    or os.environ.get('POSTGRES_PRISMA_URL')
+    or f"sqlite:///{default_sqlite_path}"
+)
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', f"sqlite:///{default_sqlite_path}"),
+        default=database_connection_url,
         conn_max_age=600,
     )
 }
