@@ -19,8 +19,18 @@ from profiles.urls import profiles_patterns
 from django.conf import settings
 from messenger.urls import messenger_patterns
 from django.views.generic import RedirectView
+from django.http import HttpResponse
+
+
+def google_site_verification(request):
+    return HttpResponse(
+        'google-site-verification: googlef793a724323269e7.html',
+        content_type='text/html',
+    )
+
 
 urlpatterns = [
+    path('googlef793a724323269e7.html', google_site_verification),
     re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/core/img/favicon.ico')),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
