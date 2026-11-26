@@ -21,14 +21,14 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
         <!-- Custom CSS -->
-        <link href="{% static 'core/css/main.css' %}?v=3" rel="stylesheet">
-        <link href="{% static 'core/img/favicon.png' %}?v=3" type="image/png" sizes="256x256" rel="icon">
-        <link href="/favicon.ico?v=3" type="image/x-icon" sizes="16x16 32x32 48x48" rel="icon">
-        <link href="{% static 'core/img/favicon.png' %}?v=3" rel="apple-touch-icon">
+        <link href="{% static 'core/css/main.css' %}?v=4" rel="stylesheet">
+        <link href="{% static 'core/img/favicon.png' %}?v=4" type="image/png" sizes="256x256" rel="icon">
+        <link href="/favicon.ico?v=4" type="image/x-icon" sizes="16x16 32x32 48x48" rel="icon">
+        <link href="{% static 'core/img/favicon.png' %}?v=4" rel="apple-touch-icon">
     </head>
     <body>
         {% if request.user.is_authenticated %}
-            <nav class="navbar navbar-dark shadow-sm sticky-top" style="background-color: #0f172a; z-index: 1030;">
+            <nav class="navbar navbar-dark shadow-sm sticky-top" style="background-color: #0f172a; border-bottom: 1px solid #1e293b; z-index: 1030;">
                 <div class="container-fluid d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <button id="show-sidebar" class="btn mr-2" type="button" title="Abrir/Cerrar Menú">
@@ -41,9 +41,26 @@
                     </div>
                     <div id="menu">
                         <ul class="navbar-nav flex-row align-items-center">
+                            <li class="nav-item mr-3">
+                                <a href="{% url 'profile' %}" class="d-flex align-items-center text-decoration-none navbar-user-pill px-2 py-1 rounded" title="Mi Perfil ({{request.user.email}})">
+                                    {% if request.user.profile.avatar %}
+                                        <img src="{{request.user.profile.avatar.url}}" width="34" height="34" class="rounded-circle mr-2" style="object-fit: cover; border: 2px solid #2563eb;" alt="{{request.user.username}}">
+                                    {% else %}
+                                        <img src="{% static 'registration/img/no-avatar.jpg' %}" width="34" height="34" class="rounded-circle mr-2" style="object-fit: cover; border: 2px solid #334155;" alt="{{request.user.username}}">
+                                    {% endif %}
+                                    <div class="d-none d-sm-flex flex-column text-left" style="line-height: 1.15;">
+                                        <span class="text-light font-weight-bold" style="font-size: 0.85rem;">
+                                            {{ request.user.get_full_name|default:request.user.username }}
+                                        </span>
+                                        <span style="font-size: 0.72rem; color: #94a3b8;">
+                                            {% if request.user.is_superuser %}Administrador{% else %}Operador TI{% endif %}{% if request.user.email %} &bull; {{ request.user.email|truncatechars:24 }}{% endif %}
+                                        </span>
+                                    </div>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="btn btn-sm btn-outline-danger" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt mr-1"></i> Cerrar sesión
+                                    <i class="fas fa-sign-out-alt mr-1"></i> <span class="d-none d-md-inline">Cerrar sesión</span>
                                 </a>
                             </li>
                         </ul>
@@ -59,34 +76,7 @@
                     <div id="sidebar-overlay" class="sidebar-overlay"></div>
                     <nav id="sidebar" class="sidebar-wrapper">
                         <div class="sidebar-content">
-                            <div class="sidebar-brand mt-2">
-                                <a href="{% url 'profile' %}" style="font-size:16px;">{{request.user.username}}</a>
-                                <div id="close-sidebar">
-                                    <i class="fas fa-times"></i>
-                                </div>
-                            </div>
-                            <div class="sidebar-header">
-                                <div class="user-pic">
-                                    {% if request.user.profile.avatar %}
-                                        <img src="{{request.user.profile.avatar.url}}" width="38" height="38" class="rounded-circle" alt="{{request.user.username}}">
-                                    {% else %}
-                                        <img src="{% static 'registration/img/no-avatar.jpg' %}" width="38" height="38" class="rounded-circle" alt="{{request.user.username}}">
-                                    {% endif %}
-                                </div>
-                                <div class="user-info">
-                                    <span class="user-role font-weight-bold">
-                                        {% if request.user.is_superuser %}
-                                            Administrador
-                                        {% else %}
-                                            Operador TI
-                                        {% endif %}
-                                    </span>
-                                    <span class="user-status text-truncate d-block" style="max-width: 140px;" title="{{request.user.email}}">
-                                        <small>{{request.user.email}}</small>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="sidebar-menu">
+                            <div class="sidebar-menu pt-2">
                                 <ul>
                                     <li class="header-menu">
                                         <span>General</span>
@@ -155,7 +145,7 @@
                                     <li>
                                         <a href="{% url 'admin:index' %}" target="_blank">
                                             <i class="fa fa-shield-alt"></i>
-                                            <span>Django Admin <i class="fas fa-external-link-alt ml-1 small"></i></span>
+                                            <span>Django Admin</span>
                                         </a>
                                     </li>
                                     {% endif %}

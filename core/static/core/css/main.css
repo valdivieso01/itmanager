@@ -568,10 +568,10 @@ body {
 
 .sidebar-wrapper {
   width: 250px;
-  height: 100%;
-  max-height: 100%;
+  height: calc(100% - 56px);
+  max-height: calc(100% - 56px);
   position: fixed;
-  top: 0;
+  top: 56px;
   left: -300px;
   z-index: 999;
 }
@@ -687,14 +687,23 @@ body {
   padding: 8px 30px 8px 20px;
 }
 
-.sidebar-wrapper .sidebar-menu ul li a i {
+.sidebar-wrapper .sidebar-menu ul li a > i {
   margin-right: 10px;
   font-size: 12px;
   width: 30px;
   height: 30px;
   line-height: 30px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 6px;
+}
+
+.navbar-user-pill {
+  transition: background-color 0.2s ease;
+}
+
+.navbar-user-pill:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
 }
 
 .sidebar-wrapper .sidebar-menu ul li a:hover > i::before {
@@ -871,10 +880,8 @@ body {
     border-right: 1px solid #1e293b;
 }
 
-.chiller-theme .sidebar-wrapper .sidebar-header,
-.chiller-theme .sidebar-wrapper .sidebar-search,
 .chiller-theme .sidebar-wrapper .sidebar-menu {
-    border-top: 1px solid #1e293b;
+    border-top: none;
 }
 
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
@@ -913,15 +920,15 @@ body {
     color: #f8fafc;
 }
 
-.chiller-theme .sidebar-wrapper ul li:hover a i,
+.chiller-theme .sidebar-wrapper ul li:hover a > i,
 .chiller-theme .sidebar-wrapper .sidebar-dropdown .sidebar-submenu li a:hover:before,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu:focus+span,
-.chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active a i {
+.chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown.active a > i {
     color: #60a5fa;
     background: rgba(37, 99, 235, 0.2);
 }
 
-.chiller-theme .sidebar-wrapper .sidebar-menu ul li a i,
+.chiller-theme .sidebar-wrapper .sidebar-menu ul li a > i,
 .chiller-theme .sidebar-wrapper .sidebar-menu .sidebar-dropdown div,
 .chiller-theme .sidebar-wrapper .sidebar-search input.search-menu,
 .chiller-theme .sidebar-wrapper .sidebar-search .input-group-text {
