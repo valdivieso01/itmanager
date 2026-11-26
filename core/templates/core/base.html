@@ -58,19 +58,19 @@
                                     </div>
                                     <i class="fas fa-chevron-down small ml-1" style="color: #94a3b8; font-size: 0.7rem;"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-2 py-2" aria-labelledby="userDropdown" style="min-width: 220px; border-radius: 10px;">
-                                    <div class="px-3 py-2 border-bottom mb-1 d-sm-none">
+                                <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-2 py-2" aria-labelledby="userDropdown" style="min-width: 100%; right: 0; left: auto; border-radius: 10px;">
+                                    <div class="px-3 py-2 border-bottom mb-1 d-sm-none text-right">
                                         <div class="font-weight-bold text-dark small">{{ request.user.get_full_name|default:request.user.username }}</div>
                                         <div class="text-muted" style="font-size: 0.75rem;">{{ request.user.email }}</div>
                                     </div>
-                                    <a class="dropdown-item d-flex align-items-center py-2" href="{% url 'profile' %}">
-                                        <i class="fas fa-user-circle text-primary mr-2" style="width: 18px; text-align: center;"></i>
+                                    <a class="dropdown-item d-flex align-items-center justify-content-end py-2 text-right" href="{% url 'profile' %}">
                                         <span>Ver Perfil</span>
+                                        <i class="fas fa-user-circle text-primary ml-2" style="width: 18px; text-align: center;"></i>
                                     </a>
                                     <div class="dropdown-divider my-1"></div>
-                                    <a class="dropdown-item d-flex align-items-center py-2 text-danger" href="{% url 'logout' %}">
-                                        <i class="fas fa-sign-out-alt mr-2" style="width: 18px; text-align: center;"></i>
+                                    <a class="dropdown-item d-flex align-items-center justify-content-end py-2 text-danger text-right" href="{% url 'logout' %}">
                                         <span>Cerrar sesión</span>
+                                        <i class="fas fa-sign-out-alt ml-2" style="width: 18px; text-align: center;"></i>
                                     </a>
                                 </div>
                             </li>
