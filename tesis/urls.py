@@ -19,7 +19,16 @@ from profiles.urls import profiles_patterns
 from django.conf import settings
 from messenger.urls import messenger_patterns
 from django.views.generic import RedirectView
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
+from django.conf import settings as dj_settings
+import os
+
+
+def favicon(request):
+    path = os.path.join(dj_settings.BASE_DIR, 'core', 'static', 'core', 'img', 'favicon.ico')
+    response = FileResponse(open(path, 'rb'), content_type='image/x-icon')
+    response['Cache-Control'] = 'public, max-age=86400'
+    return response
 
 
 def google_site_verification(request):
@@ -31,7 +40,7 @@ def google_site_verification(request):
 
 urlpatterns = [
     path('googlef793a724323269e7.html', google_site_verification),
-    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/core/img/favicon.ico')),
+    re_path(r'^favicon\.ico$', favicon),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     #paths de apps

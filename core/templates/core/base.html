@@ -21,9 +21,10 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
         <!-- Custom CSS -->
-        <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
-        <link href="{% static 'core/img/favicon.png' %}" type="image/png" rel="icon">
-        <link href="{% static 'core/img/favicon.ico' %}" type="image/x-icon" rel="icon">
+        <link href="{% static 'core/css/main.css' %}?v=3" rel="stylesheet">
+        <link href="{% static 'core/img/favicon.png' %}?v=3" type="image/png" sizes="256x256" rel="icon">
+        <link href="/favicon.ico?v=3" type="image/x-icon" sizes="16x16 32x32 48x48" rel="icon">
+        <link href="{% static 'core/img/favicon.png' %}?v=3" rel="apple-touch-icon">
     </head>
     <body>
         {% if request.user.is_authenticated %}

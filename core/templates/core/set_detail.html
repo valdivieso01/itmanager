@@ -49,13 +49,13 @@
                     <a href="{% url 'key_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-primary mr-2 mb-1">
                         <i class="fas fa-key mr-1"></i> + Credencial
                     </a>
-                    <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-success mr-2 mb-1">
+                    <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-primary mr-2 mb-1">
                         <i class="fas fa-book mr-1"></i> + Guía
                     </a>
-                    <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-info mr-2 mb-1">
+                    <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-primary mr-2 mb-1">
                         <i class="fas fa-database mr-1"></i> + Backup
                     </a>
-                    <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-secondary mr-2 mb-1">
+                    <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-outline-primary mr-2 mb-1">
                         <i class="fas fa-clipboard-check mr-1"></i> + Relevamiento
                     </a>
                     <button type="button" class="btn btn-sm btn-dark mb-1" data-toggle="modal" data-target="#qr-code-modal" title="Ver Código QR">
@@ -88,7 +88,7 @@
             <div class="card shadow-sm mb-3">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingOne" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                     <div class="d-flex align-items-center">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #fffbeb; color: #d97706;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #eff6ff; color: #2563eb;">
                             <i class="fas fa-key"></i>
                         </span>
                         <h6 class="mb-0 font-weight-bold text-dark">Credenciales & Llaves (Keys)</h6>
@@ -104,7 +104,7 @@
                                 <div class="card-body py-2 px-3">
                                     <div class="row align-items-center">
                                         <div class="col title-cut">
-                                            <strong class="text-dark"><i class="fas fa-key text-warning mr-2"></i>{{key.name}}</strong>
+                                            <strong class="text-dark"><i class="fas fa-key text-primary mr-2"></i>{{key.name}}</strong>
                                             {% if key.username %}<small class="text-muted ml-2">({{key.username}})</small>{% endif %}
                                         </div>
                                         <div class="col-auto">
@@ -132,7 +132,7 @@
             <div class="card shadow-sm mb-3">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingTwo" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                     <div class="d-flex align-items-center">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #f0fdf4; color: #16a34a;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #eff6ff; color: #2563eb;">
                             <i class="fas fa-book-reader"></i>
                         </span>
                         <h6 class="mb-0 font-weight-bold text-dark">Guías Técnicas (Guides)</h6>
@@ -148,7 +148,7 @@
                                 <div class="card-body py-2 px-3">
                                     <div class="row align-items-center">
                                         <div class="col title-cut">
-                                            <strong class="text-dark"><i class="fas fa-book text-success mr-2"></i>{{guide.name}}</strong>
+                                            <strong class="text-dark"><i class="fas fa-book text-primary mr-2"></i>{{guide.name}}</strong>
                                         </div>
                                         <div class="col-auto">
                                             <a href="{% url 'guide_detail' set.group.name|slugify set.name|slugify guide.name|slugify %}" class="btn btn-outline-primary btn-sm mr-1" title="Ver"><i class="fa fa-eye"></i></a>
@@ -162,7 +162,7 @@
                         {% empty %}
                             <div class="text-center py-3 text-muted">
                                 <p class="mb-2 small">No hay guías técnicas en este conjunto todavía.</p>
-                                <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-success">
+                                <a href="{% url 'guide_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus mr-1"></i> Crear Guía
                                 </a>
                             </div>
@@ -205,7 +205,7 @@
                         {% empty %}
                             <div class="text-center py-3 text-muted">
                                 <p class="mb-2 small">No hay registros de backup en este conjunto todavía.</p>
-                                <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-info">
+                                <a href="{% url 'backup_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus mr-1"></i> Registrar Backup
                                 </a>
                             </div>
@@ -218,7 +218,7 @@
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-3" id="headingFour" style="cursor: pointer;" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                     <div class="d-flex align-items-center">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #faf5ff; color: #9333ea;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 36px; height: 36px; background-color: #eff6ff; color: #2563eb;">
                             <i class="fas fa-clipboard-check"></i>
                         </span>
                         <h6 class="mb-0 font-weight-bold text-dark">Relevamientos Técnicos (Surveys)</h6>
@@ -234,7 +234,7 @@
                                 <div class="card-body py-2 px-3">
                                     <div class="row align-items-center">
                                         <div class="col title-cut">
-                                            <strong class="text-dark"><i class="fas fa-clipboard-list text-purple mr-2"></i>{{survey.name}}</strong>
+                                            <strong class="text-dark"><i class="fas fa-clipboard-list text-primary mr-2"></i>{{survey.name}}</strong>
                                             {% if survey.company %}<small class="text-muted ml-2">— {{survey.company}}</small>{% endif %}
                                         </div>
                                         <div class="col-auto">
@@ -249,7 +249,7 @@
                         {% empty %}
                             <div class="text-center py-3 text-muted">
                                 <p class="mb-2 small">No hay relevamientos técnicos en este conjunto todavía.</p>
-                                <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-secondary">
+                                <a href="{% url 'survey_create' set.group.name|slugify set.name|slugify %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus mr-1"></i> Nuevo Relevamiento
                                 </a>
                             </div>

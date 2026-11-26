@@ -36,7 +36,7 @@
         <div class="card border-0 shadow-sm mb-4 p-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                 <div class="d-flex align-items-center mb-3 mb-md-0">
-                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #faf5ff; color: #9333ea; font-size: 20px;">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle mr-3" style="width: 48px; height: 48px; background-color: #eff6ff; color: #2563eb; font-size: 20px;">
                         <i class="fas fa-clipboard-check"></i>
                     </span>
                     <div>
@@ -90,13 +90,13 @@
                                 <h6 class="font-weight-bold text-dark mb-0">Puestos (PCs)</h6>
                                 <small class="text-muted">Workstations</small>
                             </div>
-                            <span class="badge badge-pill badge-info px-2 py-1">{{ survey.surveyworkstation_set.count }}</span>
+                            <span class="badge badge-pill badge-primary px-2 py-1">{{ survey.surveyworkstation_set.count }}</span>
                         </div>
                         <div class="d-flex">
-                            <a href="{% url 'surveyworkstation_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-info flex-fill mr-1">
+                            <a href="{% url 'surveyworkstation_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-primary flex-fill mr-1">
                                 <i class="fas fa-desktop mr-1"></i> Ver
                             </a>
-                            <a href="{% url 'surveyworkstation_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-info" title="Agregar Puesto">
+                            <a href="{% url 'surveyworkstation_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-primary" title="Agregar Puesto">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>
@@ -112,13 +112,13 @@
                                 <h6 class="font-weight-bold text-dark mb-0">Servidores</h6>
                                 <small class="text-muted">Infraestructura</small>
                             </div>
-                            <span class="badge badge-pill badge-success px-2 py-1">{{ survey.surveyserver_set.count }}</span>
+                            <span class="badge badge-pill badge-primary px-2 py-1">{{ survey.surveyserver_set.count }}</span>
                         </div>
                         <div class="d-flex">
-                            <a href="{% url 'surveyserver_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-success flex-fill mr-1">
+                            <a href="{% url 'surveyserver_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-primary flex-fill mr-1">
                                 <i class="fas fa-server mr-1"></i> Ver
                             </a>
-                            <a href="{% url 'surveyserver_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-success" title="Agregar Servidor">
+                            <a href="{% url 'surveyserver_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-primary" title="Agregar Servidor">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>
@@ -134,13 +134,13 @@
                                 <h6 class="font-weight-bold text-dark mb-0">Dispositivos</h6>
                                 <small class="text-muted">Redes & Periféricos</small>
                             </div>
-                            <span class="badge badge-pill badge-warning px-2 py-1">{{ survey.surveydevice_set.count }}</span>
+                            <span class="badge badge-pill badge-primary px-2 py-1">{{ survey.surveydevice_set.count }}</span>
                         </div>
                         <div class="d-flex">
-                            <a href="{% url 'surveydevice_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-warning flex-fill mr-1">
+                            <a href="{% url 'surveydevice_list' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-outline-primary flex-fill mr-1">
                                 <i class="fas fa-network-wired mr-1"></i> Ver
                             </a>
-                            <a href="{% url 'surveydevice_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-warning" title="Agregar Dispositivo">
+                            <a href="{% url 'surveydevice_create' survey.set.group.name|slugify survey.set.name|slugify survey.name|slugify %}" class="btn btn-sm btn-primary" title="Agregar Dispositivo">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>
