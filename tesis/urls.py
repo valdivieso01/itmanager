@@ -31,6 +31,18 @@ def favicon(request):
     return response
 
 
+def favicon_png(request):
+    path = os.path.join(dj_settings.BASE_DIR, 'core', 'static', 'core', 'img', 'favicon.png')
+    response = FileResponse(open(path, 'rb'), content_type='image/png')
+    response['Cache-Control'] = 'public, max-age=86400'
+    return response
+
+
+def robots_txt(request):
+    content = "User-agent: *\nAllow: /\n"
+    return HttpResponse(content, content_type='text/plain')
+
+
 def google_site_verification(request):
     return HttpResponse(
         'google-site-verification: googlef793a724323269e7.html',
@@ -40,7 +52,10 @@ def google_site_verification(request):
 
 urlpatterns = [
     path('googlef793a724323269e7.html', google_site_verification),
+    path('robots.txt', robots_txt),
     re_path(r'^favicon\.ico$', favicon),
+    re_path(r'^favicon\.png$', favicon_png),
+    re_path(r'^apple-touch-icon\.png$', favicon_png),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     #paths de apps

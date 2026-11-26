@@ -7,8 +7,15 @@ from .forms import GroupForm, SetForm, KeyForm, BackupForm, SurveyForm, GuideFor
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
 
+from django.contrib.auth.views import LoginView
+
 class HomePage(TemplateView):
     template_name = "core/home.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return LoginView.as_view(template_name="registration/login.html")(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
 # Groups
 
