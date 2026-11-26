@@ -22,9 +22,9 @@
 
         <!-- Custom CSS -->
         <link href="{% static 'core/css/main.css' %}?v=5" rel="stylesheet">
-        <link href="{% static 'core/img/favicon.png' %}?v=5" type="image/png" sizes="256x256" rel="icon">
-        <link href="/favicon.ico?v=5" type="image/x-icon" sizes="16x16 32x32 48x48" rel="icon">
-        <link href="{% static 'core/img/favicon.png' %}?v=5" rel="apple-touch-icon">
+        <link href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32 48x48" rel="icon">
+        <link href="/favicon.png" type="image/png" sizes="256x256" rel="icon">
+        <link href="/apple-touch-icon.png" rel="apple-touch-icon">
     </head>
     <body>
         {% if request.user.is_authenticated %}

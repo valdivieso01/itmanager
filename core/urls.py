@@ -18,7 +18,7 @@ urlpatterns = [
     re_path(r'^ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
     re_path(r'^ckeditor/browse/', never_cache(uploader_views.browse), name='ckeditor_browse'),
     # path home
-    path('', login_required(HomePage.as_view()), name="home"),
+    path('', HomePage.as_view(), name="home"),
     # paths groups
     path('group_list', login_required(GroupList.as_view()), name="group_list"),
     path('group_create', login_required(GroupCreate.as_view()), name="group_create"),
