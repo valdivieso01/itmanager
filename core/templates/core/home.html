@@ -53,7 +53,7 @@
         <div class="col-md-6 col-xl-4 mb-4">
             <a href="{% url 'key_list' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-amber">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-key"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Bóveda de Credenciales</h5>
@@ -61,7 +61,7 @@
                         Almacenamiento seguro y cifrado de claves, credenciales de acceso y contraseñas de red.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-warning font-weight-bold small">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Acceder a la Bóveda</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
@@ -72,7 +72,7 @@
         <div class="col-md-6 col-xl-4 mb-4">
             <a href="{% url 'guide_list' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-green">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-book-reader"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Base de Conocimiento</h5>
@@ -80,7 +80,7 @@
                         Manuales de procedimientos, guías paso a paso de resolución técnica y documentación oficial.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-success font-weight-bold small">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Explorar Guías</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
@@ -91,7 +91,7 @@
         <div class="col-md-6 col-xl-4 mb-4">
             <a href="{% url 'note_list' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-purple">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-sticky-note"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Notas Rápidas</h5>
@@ -99,7 +99,7 @@
                         Bitácora operativa, anotaciones de guardia y recordatorios técnicos personales.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-purple font-weight-bold small" style="color: #9333ea !important;">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Ver Notas</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
@@ -110,7 +110,7 @@
         <div class="col-md-6 col-xl-4 mb-4">
             <a href="{% url 'messenger:list' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-teal">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-comments"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Mensajería Interna</h5>
@@ -118,7 +118,7 @@
                         Canal directo de comunicación y mensajería en tiempo real entre integrantes del equipo TI.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-teal font-weight-bold small" style="color: #0d9488 !important;">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Abrir Chat</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
@@ -130,7 +130,7 @@
             {% if request.user.is_superuser %}
             <a href="{% url 'user_list' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-indigo">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-user-shield"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Gestión de Usuarios</h5>
@@ -138,7 +138,7 @@
                         Alta, baja y control de operadores y permisos del sistema.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-indigo font-weight-bold small" style="color: #4f46e5 !important;">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Administrar Usuarios</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
@@ -146,7 +146,7 @@
             {% else %}
             <a href="{% url 'profile' %}" class="dashboard-card shadow-sm">
                 <div>
-                    <div class="dashboard-icon icon-indigo">
+                    <div class="dashboard-icon icon-blue">
                         <i class="fas fa-id-badge"></i>
                     </div>
                     <h5 class="font-weight-bold text-dark mb-2">Mi Perfil</h5>
@@ -154,7 +154,7 @@
                         Actualización de avatar, correo electrónico y credenciales personales de acceso.
                     </p>
                 </div>
-                <div class="d-flex align-items-center text-indigo font-weight-bold small" style="color: #4f46e5 !important;">
+                <div class="d-flex align-items-center text-primary font-weight-bold small">
                     <span>Configurar Perfil</span>
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
